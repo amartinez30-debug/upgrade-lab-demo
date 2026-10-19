@@ -79,7 +79,7 @@
 .locator-map-help{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;z-index:490}
 .locator-map-label{background:#fffffff0;box-shadow:0 4px 20px #0001;border-radius:4px;padding:10px 12px;font-size:10px;letter-spacing:.5px;color:#4a5158;max-width:235px;line-height:1.6}
 .locator-map-legend{position:absolute;bottom:28px;right:16px;background:#fffefeec;padding:10px 12px;font-size:10px;color:#61666d;display:grid;gap:6px;box-shadow:0 4px 20px #0001;z-index:490;pointer-events:none;border-radius:4px}
-.locator-map-legend i{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%}
+.locator-map-legend i{display:inline-block;width:10px;height:10px;margin-right:7px;border-radius:50%;vertical-align:-1px}.locator-map-legend strong{color:#23272d;font-size:10px}.network-filter-note{font-size:10px;color:#737982;line-height:1.5;margin:-3px 0 11px}.station-network{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;line-height:1.5}.station-network i{display:inline-block;width:10px;height:10px;border-radius:50%}.station-price-note{font-size:10px;color:#69727b;line-height:1.5;margin-top:8px}.station-price-note a{color:#36485e;text-decoration:underline}
 .locator-map-fallback{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:25px;color:#626b73;background:linear-gradient(140deg,#f3f5f6,#e0e5e8);z-index:1}
 .locator-footer{border-top:1px solid #e8ebed;padding:13px 26px;background:#fbfbfb;font-size:10px;line-height:1.7;color:#85898f}
 .locator-footer a{text-decoration:underline}
@@ -259,7 +259,7 @@
 <section class="locator-section" id="chargingLocator" aria-labelledby="locatorHeading">
   <header class="locator-header">
     <div><span class="eyebrow">04 / Find your charging advantage</span><h2 id="locatorHeading">No home charger? No problem.</h2>
-    <p>Search around home, work, or anywhere you park. Discover nearby charging locations, compare a confirmed station rate with Supercharging, and apply it to your Tesla ownership calculation.</p></div>
+    <p>Search around home, work, or anywhere you park. See available public pricing disclosures, recognize networks by pin color, then compare a confirmed rate with Supercharging.</p></div>
     <span class="locator-flag">APARTMENT-FRIENDLY CHARGING</span>
   </header>
   <div class="locator-grid">
@@ -279,7 +279,7 @@
         <div class="locator-setting"><label for="searchRadius">Search radius</label><select id="searchRadius"><option value="1">1 mile</option><option value="3" selected>3 miles</option><option value="5">5 miles</option><option value="10">10 miles</option></select></div>
         <div class="locator-setting"><label for="superRate">Supercharger benchmark ($/kWh)</label><input id="superRate" type="number" min="0" max="5" step=".01" value="0.43" aria-label="Supercharger benchmark dollars per kilowatt hour"/></div>
       </div>
-      <label class="locator-check"><input type="checkbox" id="cheaperOnly"/> Show only stations with a listed or Advisor-entered rate below the benchmark</label>
+      <label class="locator-check"><input type="checkbox" id="cheaperOnly"/> Show only stations with a reported or confirmed per-kWh rate below the benchmark</label>
       <button class="locator-apartment" id="apartmentMode" type="button"><span>Apartment / no home charging</span><span id="apartmentIndicator">Set home share to 0% ↗</span></button>
       <div class="locator-snapshot" aria-live="polite">
         <div class="locator-snapshot-top"><span>Charging cost comparison</span><strong id="locatorDistance">1,500 miles / month</strong></div>
@@ -288,8 +288,8 @@
         <div class="station-advice" id="locatorSavingsNote">Enter a confirmed rate at a charging station to see potential savings and use it in the ownership calculator.</div>
       </div>
       <hr class="locator-divider"/>
-      <div class="locator-results-head"><strong>Charging locations</strong><span id="locatorCount">Search an area to begin</span></div>
-      <div id="locatorStatus" class="locator-status" role="status">Map preview is centered on Rockville, Maryland. Enter any home, work or custom location to discover charging stations nearby.</div>
+      <div class="locator-results-head"><strong>Charging locations</strong><span id="locatorCount">Search an area to begin</span></div><div class="network-filter-note">Colored dots identify networks; price status appears separately. Public listings are not guaranteed live prices.</div>
+      <div id="locatorStatus" class="locator-status" role="status">Enter a home, work or other location to load nearby chargers and any station fees published in public directories. Rates in network apps may differ.</div>
       <div id="stationList" class="station-list" aria-live="polite"></div>
       <div class="station-advice">A charger on the map does not guarantee a compatible connector, public access, an open stall, or a lower price. Confirm live costs and fees in the network app before quoting.</div>
     </div>
@@ -297,10 +297,10 @@
       <div id="chargerMap" role="application" aria-label="Nearby EV charging station map"></div>
       <div id="chargerMapFallback" class="locator-map-fallback">Internet access is needed to display map tiles. You can still use the charging cost comparison and find locations in the supported charging apps.</div>
       <div class="locator-map-help"><span class="locator-map-label" id="mapAreaLabel">DEMO VIEW · Rockville, MD<br/>Search an address to load live map listings.</span></div>
-      <div class="locator-map-legend"><span><i style="background:#1a744a"></i>Below benchmark*</span><span><i style="background:#e82127"></i>At / above benchmark*</span><span><i style="background:#717780"></i>Price unavailable</span></div>
+      <div class="locator-map-legend" id="networkLegend" aria-label="Charging network pin colors"><strong>Charging networks</strong><span>Search to show network colors</span></div>
     </div>
   </div>
-  <footer class="locator-footer">Station locations and connector tags: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>, fetched through Overpass. Address search: <a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon</a> demo service. *Price comparisons use community-listed or Advisor-entered amounts, not verified live tariffs; hourly, parking, service, idle and access fees may apply. <a href="https://www.chargepoint.com/drivers" target="_blank" rel="noopener noreferrer">Verify ChargePoint prices ↗</a> · <a href="https://www.plugshare.com/" target="_blank" rel="noopener noreferrer">Browse PlugShare ↗</a></footer>
+  <footer class="locator-footer">Station locations and community tags: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>, via Overpass. Some listings and reported prices may also come from <a href="https://afdc.energy.gov/stations" target="_blank" rel="noopener noreferrer">U.S. DOE Alternative Fuels Data Center (AFDC)</a>. Address search: <a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon</a> demo service. *Publicly reported prices are not guaranteed live tariffs; station owners can change rates without notice. Hourly, session, parking, service, idle and access fees may apply. Check the official network app before using figures in a quote. <a href="https://www.chargepoint.com/drivers" target="_blank" rel="noopener noreferrer">Verify ChargePoint prices ↗</a> · <a href="https://www.plugshare.com/" target="_blank" rel="noopener noreferrer">Browse PlugShare ↗</a></footer>
 </section>
 
 <section class="action-strip"><div><b id="ctaTitle">Ready to compare the real offer?</b><p>Carry the scenario into Tesla's official configurator to verify live prices, available offers and trade-in terms.</p></div><div class="ctas"><button id="print" class="btn btn-ghost">Print / Save PDF</button><a id="order" href="https://www.tesla.com/modely/design" target="_blank" rel="noopener noreferrer" class="btn btn-red">Explore Tesla Configurator ↗</a></div></section>
