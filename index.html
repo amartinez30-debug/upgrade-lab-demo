@@ -567,19 +567,74 @@ function refreshSnapshot(){const kwh=kwhMonthly(),base=chargingNum(),s=stations.
  (diff>=0?usd(diff)+' per month cheaper':usd(-diff)+' per month more expensive')+' than the entered Supercharger rate at '+Math.round(annualMiles()/12).toLocaleString()+' mi/month (before fees and losses).';
  const a=$('apartmentIndicator');a.textContent=Number($('homeShare').value)===0?'Home charging: 0% ✓':'Set home share to 0% ↗';
 }
-function getRate(s){if(rates.has(s.key))return rates.get(s.key);
- // Only recognize unambiguous kWh-priced community tags; all values are advisory, not live or independently verified.
- let raw=s.tags.charge||s.tags['charge:car']||'';
- if(raw&&!/[;+]/.test(raw)){
-   const normalized=String(raw).trim();
-   const m=normalized.match(/^(?:USD\s*)?\$?\s*(\d+(?:\.\d+)?)\s*(?:USD\s*)?(?:\/\s*kwh|per\s*kwh)$/i);
-   if(m && Number(m[1])<=5)return Number(m[1]);
- }
- if(String(s.tags.fee||'').toLowerCase()==='no')return 0;
- return null;
+const NETWORKS=[
+ ['Electrify America','#138754',/electrify america|electrifyamerica|\bea\b/i],
+ ['ChargePoint','#f36f21',/chargepoint|charge point/i],
+ ['Tesla','#e82127',/tesla|supercharger/i],
+ ['EVgo','#236cc4',/\bevgo\b/i],
+ ['Blink','#1778bd',/\bblink\b/i],
+ ['EV Connect','#00a3ad',/ev connect/i],
+ ['FLO','#007f9d',/\bflo\b/i],
+ ['Shell Recharge','#dfb126',/shell recharge|shell recharge solutions/i],
+ ['bp pulse','#65a930',/bp pulse|bppulse/i],
+ ['IONNA','#704abc',/\bionna\b/i],
+ ['Volta','#299c90',/\bvolta\b/i],
+ ['Rivian','#827258',/\brivian\b/i],
+ ['Other network','#737984',/./]
+];
+function networkInfo(s){
+ const t=s.tags||{};
+ const raw=[s.network,t.network,t.operator,t.brand,s.name].filter(Boolean).join(' ');
+ const found=NETWORKS.find(n=>n[2].test(raw))||NETWORKS[NETWORKS.length-1];
+ return {name:found[0],color:found[1]};
 }
-function sourceLabel(s){if(rates.has(s.key))return 'Advisor-entered rate';if(getRate(s)!==null)return getRate(s)===0?'OSM tagged free · verify':'OSM price tag · verify';return 'Rate unknown';}
+function parseListedPrice(raw){
+ const text=String(raw||'').trim().slice(0,260);
+ if(!text)return {rate:null,raw:''};
+ if(/^(free|no fee|no charge|free charging|free to use|0(?:\.0+)?\s*USD?)$/i.test(text))return {rate:0,raw:text};
+ // Do not price comparisons based on time-of-use ranges, conditions or per-hour disclosures.
+ if(/(?:\bto\b|\d\s*[-–]\s*\$?\d)\s*\$?\d*\.?\d*\s*(?:USD)?\s*\/\s*kwh/i.test(text)
+    ||/time.of.use|varies|variable|peak|off.peak|after\s+\d+\s+(?:hour|minute)/i.test(text))
+   return {rate:null,raw:text};
+ const match=text.match(/(?:USD\s*|US\$\s*|\$\s*)?(\d+(?:\.\d{1,4})?)\s*(?:USD\s*)?(?:\/\s*|\bper\s+)(?:kwh|kw[\s-]*h|kilowatt[\s-]*hour)/i);
+ if(match && Number(match[1])>=0 && Number(match[1])<=5)return {rate:Number(match[1]),raw:text};
+ return {rate:null,raw:text};
+}
+function priceEvidence(s){
+ if(rates.has(s.key))return {rate:rates.get(s.key),raw:'Advisor-entered, not an API-confirmed live tariff',source:'Advisor entry · verify'};
+ if(s.afdcPrice){
+  const p=parseListedPrice(s.afdcPrice);
+  if(p.rate!==null)return {...p,source:'DOE AFDC reported rate · verify'};
+ }
+ const t=s.tags||{};
+ const raw=t.charge||t['charge:car']||t['charge:conditional']||'';
+ if(raw){
+  const p=parseListedPrice(raw);
+  if(p.rate!==null&&!t['charge:conditional'])return {...p,source:'OpenStreetMap community rate · verify'};
+  if(!s.afdcPrice)return {...p,source:'OpenStreetMap price details · verify'};
+ }
+ if(String(t.fee||'').toLowerCase()==='no'&&!t['charge:conditional']&&!raw)return {rate:0,raw:'OSM fee=no; other parking or access fees may apply',source:'OpenStreetMap tagged free · verify'};
+ if(s.afdcPrice)return {...parseListedPrice(s.afdcPrice),source:'DOE AFDC pricing details · verify'};
+ return {rate:null,raw:'No current station tariff in public directory',source:'Price unavailable · check network app'};
+}
+function getRate(s){return priceEvidence(s).rate;}
+function sourceLabel(s){
+ const p=priceEvidence(s);
+ const date=s.afdcConfirmed&&!rates.has(s.key)?' · station last confirmed '+s.afdcConfirmed:'';
+ return p.source+date;
+}
 function priceStatus(s){const rate=getRate(s);return rate===null?'unknown':rate<chargingNum()?'cheaper':'more';}
+function networkLegend(){
+ const el=$('networkLegend');if(!el)return;
+ el.replaceChildren();const title=document.createElement('strong');title.textContent='Charging networks';el.append(title);
+ if(!stations.length){const span=document.createElement('span');span.textContent='Search an address to load networks';el.append(span);return;}
+ const seen=new Map();for(const s of stations){const n=networkInfo(s);seen.set(n.name,n.color);}
+ const entries=[...seen.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+ for(const [name,color] of entries){
+   const line=document.createElement('span'),dot=document.createElement('i');
+   dot.style.background=color;line.append(dot,document.createTextNode(name));el.append(line);
+ }
+}
 function stationCoords(el){return [el.lat??el.center?.lat,el.lon??el.center?.lon];}
 function stationName(tags){return String(tags.name||tags.brand||tags.operator||tags.network||'EV charging location').trim().slice(0,150);}
 function stationAccess(tags){return String(tags.access||tags['motorcar:access']||'not specified');}
