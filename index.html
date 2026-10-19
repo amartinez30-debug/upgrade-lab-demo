@@ -730,7 +730,7 @@ function showResults(items,coords,afdcItems=[],afdcNote=''){
   const name=String(row.station_name||row.ev_network||'Charging location').trim().slice(0,150);
   const provider=String(row.ev_network||'').slice(0,120);
   const tags={name,operator:provider,network:provider,access:'public'};
-  for(const c of row.ev_connector_types||[]){tags['socket:'+String(c).toLowerCase()]=1;}
+  for(const c of (Array.isArray(row.ev_connector_types)?row.ev_connector_types:[])){tags['socket:'+String(c).toLowerCase()]=1;}
   const candidate={key:'afdc:'+row.id,coords:loc,distance:d,name,tags,network:provider,
    afdcPrice:String(row.ev_pricing||'').trim().slice(0,260),afdcConfirmed:row.date_last_confirmed||'',
    source:'DOE AFDC'};
@@ -748,11 +748,11 @@ function showResults(items,coords,afdcItems=[],afdcNote=''){
     supplemented++;
   }else unique.set(candidate.key,candidate);
  }
- stations=[...unique.values()].sort((a,b)=>{
+ rates.clear();stations=[...unique.values()].sort((a,b)=>{
   const pa=getRate(a)!==null?0:1,pb=getRate(b)!==null?0:1;
   return pa-pb||a.distance-b.distance;
  }).slice(0,140);
- selectedKey=null;rates.clear();
+ selectedKey=null;
  if(map){renderMarkers();map.setView(coords,Math.max(10,max===1?14:max===3?13:max===5?12:11));rangeRing?.setRadius(milesToM(max));}
  renderStations();refreshSnapshot();
  const known=stations.filter(s=>getRate(s)!==null).length;
