@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f5f3">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/upgrade-lab-192.png">
+<meta name="apple-mobile-web-app-title" content="Upgrade Lab">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" defer></script>
+<title>Upgrade Lab | Swipe-to-Upgrade Showroom Experience</title>
+<style>
+:root{--black:#171a20;--gray:#5c5e62;--mute:#85878c;--line:#e3e5e8;--soft:#f4f4f4;--white:#fff;--red:#e82127;--green:#226e4a;--font:Arial,Helvetica,sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5f5f3;color:var(--black);font-family:var(--font);font-size:14px}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.page{max-width:1570px;margin:auto;padding:0 28px 44px}.nav{height:78px;display:flex;align-items:center;justify-content:space-between;gap:18px}.mark{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:4px;font-size:16px}.mark-icon{width:32px;height:32px;background:#171a20;color:white;display:grid;place-items:center;font-size:20px;font-weight:400;letter-spacing:0;border-radius:3px}.mark small{font-size:9px;letter-spacing:1.9px;font-weight:700;color:#73767a;display:block;margin-top:3px}.navmid{font-size:11px;color:#686b70;letter-spacing:1.8px;text-transform:uppercase}.navright{display:flex;align-items:center;gap:14px}.pill{border:1px solid #dadddf;border-radius:99px;padding:9px 13px;text-transform:uppercase;letter-spacing:1.5px;font-size:10px;color:#565a61;white-space:nowrap}.btn{border:none;background:#171a20;color:#fff;border-radius:4px;padding:13px 21px;font-size:11px;text-transform:uppercase;letter-spacing:1.7px;font-weight:700;transition:transform .2s,background .2s}.btn:hover{background:#32363d;transform:translateY(-1px)}.btn-ghost{background:white;color:#171a20;border:1px solid #dadcdf}.btn-red{background:#e82127}.btn-red:hover{background:#c91920}.hero{height:350px;border-radius:6px;background:#171a20;position:relative;overflow:hidden;color:white;display:flex;align-items:center}.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 74% 90%,#53565d75,transparent 38%),linear-gradient(124deg,transparent 60%,#ffffff08 60.1%,transparent 60.3%);pointer-events:none}.hero::after{content:"";position:absolute;inset:auto 0 0;height:50px;background:linear-gradient(transparent,#101114)}.hero-text{padding:48px 58px;position:relative;z-index:2;max-width:610px}.eyebrow{letter-spacing:3px;font-size:10px;text-transform:uppercase;font-weight:700;color:#b4b6bb}.hero h1{font-weight:500;font-size:clamp(35px,3.65vw,57px);line-height:1.08;letter-spacing:-2.5px;margin:17px 0 20px}.hero p{font-size:15px;color:#bcbec4;line-height:1.65;max-width:390px;margin:0}.car{position:absolute;right:-5px;bottom:-18px;width:59%;min-width:610px;z-index:1;opacity:.93;filter:drop-shadow(0 35px 24px #0009)}.tiny-line{height:2px;background:#e82127;width:45px;margin-bottom:18px}.section-head{display:flex;align-items:center;justify-content:space-between;margin:28px 0 16px;gap:16px}.section-head h2{font-weight:600;font-size:17px;letter-spacing:-.25px;margin:0}.section-head small{color:#85878c;font-size:11px}.workspace{display:grid;grid-template-columns:445px minmax(0,1fr);gap:18px;align-items:start}.input-panel,.output-panel{background:white;border:1px solid #e6e7e9;border-radius:6px;box-shadow:0 4px 18px #00000004}.input-panel{padding:25px 26px}.input-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.input-header span{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700}.input-header button{border:0;background:none;text-decoration:underline;color:#777;font-size:11px;padding:4px}.section-divider{height:1px;background:var(--line);margin:24px 0}.step-head{display:flex;gap:11px;align-items:center;margin-bottom:18px}.step-num{font-size:12px;color:#e82127;letter-spacing:1px;font-weight:800}.step-head h3{font-size:14px;margin:0;font-weight:700}.step-head em{font-weight:400;font-style:normal;color:#909298;font-size:11px;margin-left:auto}.field{margin:0 0 14px}.field label{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;color:#585b60;margin:0 0 7px;gap:8px}.field label em{font-style:normal;font-weight:400;color:#979ba0}.field input,.field select{height:42px;width:100%;border:1px solid #dcdfe3;background:#f8f9fa;border-radius:4px;outline:none;padding:0 13px;color:#171a20;font-weight:600;font-size:13px;transition:border .15s,box-shadow .15s}.field input:focus,.field select:focus{border-color:#777f89;box-shadow:0 0 0 3px #0000000a}.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.mileage-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}.mileage-head label{font-size:11px;color:#565b60;font-weight:700}.segmented{display:flex;background:#f2f3f4;border-radius:4px;padding:3px;gap:2px}.segmented button{border:0;background:none;color:#878b91;font-size:10px;font-weight:700;letter-spacing:.4px;padding:7px 9px;border-radius:3px}.segmented button.active{color:#171a20;background:white;box-shadow:0 1px 4px #00000018}.inline-note{font-size:11px;color:#888c91;line-height:1.55;margin-top:5px}.vinrow{display:flex;gap:7px}.vinrow input{min-width:0;flex:1}.vinrow button{border:0;border-radius:4px;background:#292b30;color:white;font-size:10px;padding:0 11px;font-weight:700;white-space:nowrap}.vinstatus{display:block;min-height:15px;margin-top:4px;font-size:10px;color:#757980}.rate-card{background:#f8f8f7;padding:12px 13px;border:1px solid #eceeef;border-radius:4px;margin-bottom:14px;font-size:11px;line-height:1.5;color:#6b6e73}.rate-card b{color:#171a20}.offer-label{color:#c71f25;text-transform:uppercase;letter-spacing:1.5px;font-size:10px;font-weight:700}.output-panel{padding:0;overflow:hidden}.summary{padding:29px 31px 28px}.summary-top{display:flex;align-items:center;justify-content:space-between;gap:16px}.summary-top .upper{font-size:10px;letter-spacing:2.1px;color:#757a7e;font-weight:700;text-transform:uppercase}.sample{font-size:10px;color:#7d8085;text-transform:uppercase;letter-spacing:1px}.summary h2{font-size:27px;font-weight:500;margin:12px 0 18px;letter-spacing:-.7px}.costs{display:grid;grid-template-columns:1fr 1fr;gap:14px}.cost-card{padding:22px;border:1px solid #e9e9e9;border-radius:4px;background:#f8f9fa}.cost-card.tesla{background:#171a20;color:white;border-color:#171a20}.cost-card .cap{font-size:10px;letter-spacing:1.7px;text-transform:uppercase;color:#686d74;font-weight:700}.cost-card.tesla .cap{color:#babdc4}.cost-card .big{font-size:clamp(28px,3.1vw,45px);font-weight:500;letter-spacing:-1.7px;margin:13px 0 4px;white-space:nowrap}.cost-card small{font-size:11px;color:#878b91}.cost-card.tesla small{color:#bdc0c6}.impact{padding:22px 24px;margin-top:16px;background:#f3f7f4;border:1px solid #dfece2;border-radius:4px;display:flex;align-items:center;justify-content:space-between;gap:15px}.impact.more{background:#faf7f3;border-color:#eae6df}.impact .cap{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#5c6861;font-weight:700}.impact.more .cap{color:#78685b}.impact .big{font-size:34px;font-weight:600;color:#226e4a;letter-spacing:-1.5px;margin:8px 0 6px}.impact.more .big{color:#8b5a39}.impact p{margin:0;color:#69726b;font-size:12px;line-height:1.5}.impact-icon{font-size:34px;color:#427e60;border-radius:50%;border:1px solid #c0d9c8;min-width:56px;height:56px;display:grid;place-items:center}.impact.more .impact-icon{color:#906d4f;border-color:#e3cfbd}.breakdown{border-top:1px solid #eff0f1;padding:26px 31px 28px}.block-title{display:flex;align-items:center;justify-content:space-between;gap:15px}.block-title h3{margin:0;font-size:14px}.block-title span{color:#989b9f;font-size:10px}.bar-block{margin-top:25px}.bar-heading{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px;font-weight:700}.bar-heading span:last-child{font-weight:500}.bar{height:12px;width:100%;display:flex;overflow:hidden;border-radius:2px;background:#eef0f2}.bar>.seg{height:100%;transition:width .3s}.c-loan{background:#22262d}.c-fuel{background:#e82127}.c-ins{background:#858b93}.c-maint{background:#b8bdc3}.c-other{background:#d9dde0}.bar.tesla .c-loan{background:#545962}.bar.tesla .c-fuel{background:#de6065}.key{display:flex;gap:11px;flex-wrap:wrap;margin-top:19px;color:#777b80;font-size:10px}.key span{display:flex;align-items:center;gap:6px}.key i{display:inline-block;height:9px;width:9px;border-radius:2px}.table-wrap{border-top:1px solid #eceef0;padding:26px 31px 26px}.detail-table{border-collapse:collapse;width:100%;margin:15px 0 0;font-size:12px}.detail-table th{text-transform:uppercase;font-size:10px;letter-spacing:1px;color:#878b90;padding:11px 0;border-bottom:1px solid #e7e8ea;text-align:right}.detail-table th:first-child{text-align:left}.detail-table td{padding:11px 0;border-bottom:1px solid #f0f1f2;text-align:right;font-variant-numeric:tabular-nums}.detail-table td:first-child{text-align:left;color:#676b70}.detail-table tr:last-child td{font-weight:800;color:#171a20;border-top:1px solid #cfd3d7;border-bottom:0}.detail-table tr:last-child td:first-child{color:#171a20}.substats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #eceeef;background:#fbfbfb}.stat{padding:23px 20px;border-right:1px solid #e9eaed}.stat:last-child{border:0}.stat strong{display:block;font-size:21px;letter-spacing:-.6px;margin-top:7px}.stat label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#7a7f85}.action-strip{margin-top:18px;display:flex;gap:10px;align-items:center;justify-content:space-between;border-radius:6px;background:white;border:1px solid #e7e8ea;padding:19px 22px}.action-strip b{font-size:13px}.action-strip p{font-size:11px;color:#898d92;line-height:1.6;margin:5px 0 0}.action-strip .ctas{display:flex;gap:9px}.bottom-note{margin-top:19px;font-size:10px;color:#84888f;line-height:1.7;max-width:1160px}.fine{color:#9fa2a7;font-size:10px}.manual{font-size:11px;color:#888b90;text-align:right}.mt{margin-top:8px}.foot{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:24px;color:#999da2;font-size:10px;letter-spacing:.5px}.good{color:#247047!important}.warn{color:#ac621d!important}.savings{color:#277a4f!important}.toggleline{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#555;margin-bottom:13px}.toggleline input{accent-color:#171a20}#loanWarn{padding:10px;background:#fff6ee;border:1px solid #f0d9bf;border-radius:4px;color:#89613d;font-size:11px;line-height:1.5;display:none;margin-top:10px}#loanWarn.visible{display:block}@media(max-width:1050px){.workspace{grid-template-columns:380px minmax(0,1fr)}.hero-text{padding:35px}.hero{height:300px}.car{min-width:470px;opacity:.7}.input-panel{padding:22px}.summary,.breakdown,.table-wrap{padding:22px}.cost-card{padding:16px}.cost-card .big{font-size:30px}.summary h2{font-size:22px}}@media(max-width:790px){.page{padding:0 13px 25px}.nav{height:64px}.navmid,.navright .pill{display:none}.mark{font-size:13px;letter-spacing:2px}.hero{height:286px}.hero h1{font-size:35px}.hero p{font-size:13px}.hero-text{padding:25px;max-width:440px}.car{right:-220px;bottom:-15px;min-width:550px;opacity:.13}.workspace{grid-template-columns:1fr}.section-head h2{font-size:15px}.navright .btn{padding:10px}.action-strip{flex-wrap:wrap}.action-strip .ctas{width:100%}.action-strip .ctas>*{flex:1;text-align:center}.substats .stat{padding:16px 10px}.stat strong{font-size:17px}}@media(max-width:380px){.row3{grid-template-columns:1fr 1fr}.cost-card .big{font-size:25px}.summary h2{font-size:20px}.impact .big{font-size:25px}.cost-card{padding:12px}.action-strip .ctas{flex-direction:column}.key{gap:8px}}@media print{body{background:white}.page{max-width:none;padding:0}.navright,.vinrow button,.input-header button,.action-strip,.foot{display:none!important}.nav{height:50px}.hero{height:150px;page-break-inside:avoid}.hero h1{font-size:30px}.hero p{font-size:10px}.hero-text{padding:15px 25px}.workspace{grid-template-columns:42% 58%;gap:10px}.input-panel,.output-panel{box-shadow:none}.input-panel{padding:14px}.field{margin-bottom:9px}.field input,.field select{height:31px}.section-divider{margin:11px 0}.summary,.breakdown,.table-wrap{padding:16px}.section-head{margin:10px 0}.impact{padding:12px}.substats{page-break-inside:avoid}#loanWarn{font-size:9px}.bottom-note{font-size:9px}.btn{display:none}}
+
+/* Charging discovery */
+.locator-section{margin-top:21px;background:#fff;border:1px solid #e4e7ea;border-radius:7px;overflow:hidden}
+.locator-header{padding:30px 32px 24px;border-bottom:1px solid #edf0f2;display:flex;justify-content:space-between;align-items:end;gap:20px}
+.locator-header .eyebrow{color:var(--red);font-weight:800;font-size:10px;letter-spacing:2px}
+.locator-header h2{font-weight:500;letter-spacing:-.8px;font-size:clamp(24px,2.8vw,36px);margin:11px 0}
+.locator-header p{color:#72767b;font-size:12px;line-height:1.7;max-width:650px;margin:0}
+.locator-flag{border:1px solid #dee2e5;background:#f9fafb;padding:12px 15px;border-radius:4px;color:#51555a;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:800;white-space:nowrap}
+.locator-grid{display:grid;grid-template-columns:minmax(345px,0.85fr) minmax(400px,1.4fr);min-height:560px}
+.locator-sidebar{padding:24px 24px;border-right:1px solid #ebedef;min-width:0}
+.locator-fieldhead{font-size:11px;font-weight:750;color:#51555b;margin-bottom:9px}
+.locator-tabs{display:flex;gap:5px;margin-bottom:15px;background:#f2f3f4;border-radius:5px;padding:4px}
+.locator-tabs button{flex:1;min-width:0;border:0;border-radius:4px;background:transparent;padding:12px 5px;font-size:11px;font-weight:700;color:#777c82}
+.locator-tabs button.active{background:#171a20;color:white}
+.locator-row{display:flex;gap:9px}
+.locator-row input,.locator-row select,.locator-setting input,.locator-setting select,.station-price input{background:#f9fafb;border:1px solid #dfe2e6;border-radius:4px;color:#171a20;font-size:12px;outline:none;min-width:0}
+.locator-row input:focus,.locator-row select:focus,.locator-setting input:focus,.station-price input:focus{border-color:#6c737a;box-shadow:0 0 0 3px #171a2010}
+.locator-row input{height:45px;padding:0 12px;flex:1;width:60%}
+.locator-row button{padding:12px 13px;white-space:nowrap;letter-spacing:.6px}
+.locator-hint{font-size:10px;color:#94989d;line-height:1.5;margin:9px 0 19px}
+.locator-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.locator-setting{display:grid;gap:8px}
+.locator-setting label{font-size:10px;color:#64686d;font-weight:700}
+.locator-setting select,.locator-setting input{height:38px;padding:0 10px;width:100%}
+.locator-check{display:flex;align-items:flex-start;gap:8px;margin:15px 0 12px;font-size:11px;color:#636a70;line-height:1.5;cursor:pointer}
+.locator-check input{accent-color:#171a20;margin:2px 0 0}
+.locator-snapshot{border:1px solid #e8eaee;border-radius:5px;background:#f8f9fa;padding:15px;margin:18px 0}
+.locator-snapshot-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;text-transform:uppercase;font-weight:750;letter-spacing:1.15px;color:#696d72;margin-bottom:10px}
+.locator-snapshot-top strong{color:#e82127}
+.locator-number{font-size:29px;letter-spacing:-1px;font-weight:600}
+.locator-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;color:#6e757a;font-size:11px}
+.locator-stats strong{display:block;font-size:15px;color:#171a20;margin-top:4px}
+.locator-apartment{border:1px solid #d9dcdf;color:#171a20;background:white;font-size:11px;font-weight:800;padding:11px 12px;border-radius:4px;width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:7px}
+.locator-apartment:hover{background:#f6f7f7}
+.locator-divider{margin:21px 0 16px;border:0;border-top:1px solid #e9ebed}
+.locator-results-head{display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:11px;gap:8px}
+.locator-results-head strong{font-size:12px}
+.locator-results-head span{font-size:10px;color:#85898e}
+.locator-status{font-size:11px;line-height:1.55;color:#6b7178;background:#f7f8f9;border:1px solid #e6e9ec;padding:12px;border-radius:4px;margin-bottom:9px}
+.locator-status.error{color:#8b452d;background:#fcf7f5;border-color:#f0dfd9}
+.locator-status.success{color:#285b44;background:#f3f8f5;border-color:#dcebe2}
+.station-list{display:grid;gap:9px;max-height:425px;overflow-y:auto;padding-right:3px}
+.station-card{border:1px solid #e4e7ea;border-radius:5px;padding:13px 14px;background:#fff;transition:border-color .15s,background .15s}
+.station-card:hover,.station-card.selected{border-color:#abb1b7;background:#fcfcfd}
+.station-top{display:flex;align-items:start;justify-content:space-between;gap:9px}
+.station-name{font-size:12px;font-weight:750;line-height:1.3}
+.station-meta{font-size:10px;color:#7f858c;margin-top:5px;line-height:1.55}
+.station-badge{font-size:9px;font-weight:800;padding:5px 7px;border-radius:3px;white-space:nowrap;background:#eef0f2;color:#63686e}
+.station-badge.cheaper{color:#1e6c42;background:#e7f5e9}
+.station-badge.more{color:#9f4938;background:#fff0ec}
+.station-badge.unknown{color:#626870;background:#f0f1f3}
+.station-bottom{margin-top:11px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.station-actions{display:flex;gap:11px;align-items:center;font-size:10px}
+.station-actions a,.station-actions button{font-size:10px;color:#3d4854;text-decoration:underline;background:none;border:0;padding:0}
+.station-price{display:flex;gap:6px;align-items:center;margin-top:11px;padding-top:11px;border-top:1px solid #edf0f1}
+.station-price label{font-size:10px;color:#7f858a;flex:1;line-height:1.35}
+.station-price input{width:75px;height:34px;padding:0 6px}
+.station-price button{background:#171a20;color:white;border:0;border-radius:4px;padding:10px 12px;font-size:10px;font-weight:700;white-space:nowrap}
+.station-price button:disabled{opacity:.5;cursor:not-allowed}
+.station-advice{font-size:10px;color:#858c92;line-height:1.5;margin-top:10px}
+.locator-map-wrap{position:relative;min-width:0;min-height:540px;background:#e9edf0}
+#chargerMap{height:100%;min-height:540px;width:100%;z-index:0}
+.locator-map-help{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;z-index:490}
+.locator-map-label{background:#fffffff0;box-shadow:0 4px 20px #0001;border-radius:4px;padding:10px 12px;font-size:10px;letter-spacing:.5px;color:#4a5158;max-width:235px;line-height:1.6}
+.locator-map-legend{position:absolute;bottom:28px;right:16px;background:#fffefeec;padding:10px 12px;font-size:10px;color:#61666d;display:grid;gap:6px;box-shadow:0 4px 20px #0001;z-index:490;pointer-events:none;border-radius:4px}
+.locator-map-legend i{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%}
+.locator-map-fallback{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:25px;color:#626b73;background:linear-gradient(140deg,#f3f5f6,#e0e5e8);z-index:1}
+.locator-footer{border-top:1px solid #e8ebed;padding:13px 26px;background:#fbfbfb;font-size:10px;line-height:1.7;color:#85898f}
+.locator-footer a{text-decoration:underline}
+.leaflet-popup-content-wrapper{border-radius:5px}.leaflet-popup-content{font:12px Arial,sans-serif;line-height:1.7}
+@media(max-width:1080px){.locator-grid{grid-template-columns:minmax(320px,1fr) minmax(350px,1fr)}.locator-header{padding:25px}}
+@media(max-width:820px){.locator-header{align-items:start;flex-direction:column;gap:10px}.locator-grid{display:flex;flex-direction:column}.locator-sidebar{border-right:0;border-bottom:1px solid #ebedef}.locator-map-wrap,#chargerMap{min-height:415px;height:415px}.station-list{max-height:360px}}
+@media(max-width:530px){.locator-header{padding:22px 19px}.locator-sidebar{padding:18px}.locator-row{flex-direction:column}.locator-row input{width:100%}.locator-row button{width:100%}.locator-map-wrap,#chargerMap{min-height:380px;height:380px}.locator-map-label{max-width:170px}.locator-map-legend{right:7px;bottom:22px}}
+@media print{.locator-section{display:none!important}}
+
+
+/* Vehicle intelligence · model-informed ownership budget */
+.ownership-input{border:1px solid #e3e7eb;border-radius:6px;background:#fbfcfc;padding:15px 15px 12px;margin-top:7px}
+.ownership-input .eyebrow-small{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#c51f25;font-weight:800}
+.ownership-input .field{margin-top:13px}
+.ownership-info{font-size:11px;line-height:1.65;color:#737981;margin:9px 0}
+.ownership-info a{color:#424950;text-decoration:underline;text-underline-offset:2px}
+.ownership-info strong{color:#252a31}
+.ownership-meta{font-size:10px;color:#717984;margin-top:6px;line-height:1.5;min-height:16px}
+.ownership-source{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.65px;text-transform:uppercase;color:#5f6871;border:1px solid #dee1e5;padding:4px 7px;border-radius:3px;background:white}
+.ownership-input .feature-btn{background:white;border:1px solid #cdd3d8;padding:10px;font-size:10px;color:#242930;font-weight:800;width:100%;border-radius:4px}
+.ownership-input .feature-btn:hover{background:#f0f2f3}
+.ownership-check{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:#4c545b;margin:7px 0;line-height:1.5;cursor:pointer}
+.ownership-check input{accent-color:#171a20;margin-top:2px}
+.epa-match{display:none;margin-top:10px;padding:12px;background:#f1f3f5;border-radius:4px;border:1px solid #e0e3e6}
+.epa-match.visible{display:block}
+.epa-match button{margin-top:9px}
+.owner-results{padding:26px 31px;border-top:1px solid #ecedef;background:#fbfcfc;page-break-inside:avoid}
+.owner-results h3{font-size:16px;letter-spacing:-.2px;font-weight:650;margin:8px 0 16px}
+.owner-results .result-head{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}
+.owner-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}
+.owner-summary{border:1px solid #e1e5e8;padding:17px 16px;background:white;border-radius:5px}
+.owner-summary.dark{background:#171a20;color:#fff;border-color:#171a20}
+.owner-summary label{font-size:9px;letter-spacing:1.15px;text-transform:uppercase;color:#80868d;font-weight:800;display:block;line-height:1.55}
+.owner-summary.dark label{color:#b7bec5}
+.owner-summary strong{font-size:clamp(23px,2.5vw,32px);display:block;letter-spacing:-.8px;font-weight:600;margin:8px 0 6px}
+.owner-summary span{font-size:11px;color:#8c949b}
+.owner-summary.dark span{color:#c4c9ce}
+.owner-owner-table{font-size:11px;width:100%;border-collapse:collapse;margin-bottom:12px}
+.owner-owner-table td{padding:9px 3px;border-bottom:1px solid #e9ebed}
+.owner-owner-table td:last-child{text-align:right;font-weight:750;font-variant-numeric:tabular-nums}
+.owner-owner-note{color:#7d838a;line-height:1.6;font-size:10px;margin-top:10px}
+.owner-owner-note a{color:#555e65;text-decoration:underline}
+@media(max-width:790px){.owner-results{padding:19px}.owner-summary{padding:13px}.owner-summary strong{font-size:25px}}
+@media(max-width:395px){.owner-summary-grid{grid-template-columns:1fr}}
+
+/* Showroom journey: responsive swipe carousel, no artificial urgency or hidden quote conditions. */
+[hidden]{display:none!important}
+.page{max-width:1500px}.nav{height:70px}.hero{height:235px}.hero-text{padding:30px 44px}.hero h1{font-size:clamp(29px,3.6vw,47px);margin:12px 0}.hero p{font-size:13px}.car{width:55%;min-width:570px;right:0;bottom:-53px;opacity:.67}
+.section-head{margin:22px 0 12px}.workspace{display:flex;flex-direction:column;align-items:stretch;gap:16px}.input-panel{padding:26px 28px;max-width:1120px;width:100%;margin:0 auto;border-radius:10px}.output-panel{max-width:1120px;width:100%;margin:0 auto;border-radius:10px}.input-header{margin-bottom:14px}.journey-intro{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:23px}.journey-intro h2{font-size:clamp(22px,3vw,37px);margin:8px 0 8px;font-weight:520;letter-spacing:-1.2px}.journey-intro p{font-size:12px;color:#777d84;line-height:1.5;margin:0}.journey-progress{min-width:96px;display:grid;gap:10px;font-size:12px;font-weight:800;letter-spacing:1.5px}.progress-line{height:3px;background:#e5e7e9;border-radius:8px;overflow:hidden}.progress-line i{display:block;width:33.3%;height:100%;background:#e82127;transition:width .2s}
+.journey-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:20px;padding:5px;border-radius:7px;background:#f2f3f4}.journey-tab{font-size:11px;font-weight:700;color:#858990;border:0;border-radius:5px;background:transparent;padding:13px 8px;transition:background .15s}.journey-tab span{color:#a8acb2;margin-right:8px}.journey-tab.active{background:white;color:#171a20;box-shadow:0 2px 9px #00000012}.journey-tab.active span{color:#e82127}
+.journey-window{overflow:hidden;border:1px solid #eff0f1;border-radius:8px;background:#fff}.journey-track{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;scroll-behavior:auto;touch-action:pan-x pan-y;outline-offset:2px}.journey-track::-webkit-scrollbar{display:none}.journey-slide{scroll-snap-align:start;scroll-snap-stop:always;flex:0 0 100%;width:100%;min-width:0;padding:23px 30px 25px}.slide-topline{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #e8eaec;padding-bottom:15px;font-weight:800;color:#e82127;letter-spacing:1.7px;font-size:10px;margin-bottom:23px}.slide-topline span{font-size:9px;letter-spacing:1px;color:#959ba0}.journey-slide .step-head{margin-bottom:20px}.journey-slide .row2,.journey-slide .row3{max-width:830px}.journey-slide .field{max-width:850px}.journey-slide #ownershipEstimator{max-width:860px}.slide-cta{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:23px;border-top:1px solid #eceeef;padding-top:20px}.slide-cta .btn{min-width:140px}.journey-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:19px}.journey-arrow-group{display:flex;align-items:center;gap:13px;color:#9ba0a6;font-size:13px}.journey-arrow-group button{border:1px solid #dce0e3;background:white;color:#20242a;width:39px;height:39px;border-radius:50%;font-size:17px}.journey-arrow-group button:disabled{opacity:.25;cursor:default}.jump-breakdown{background:none;border:0;color:#3c454e;text-decoration:underline;text-underline-offset:3px;font-size:11px;font-weight:800}
+.offer-selector{display:flex;align-items:center;justify-content:space-between;gap:15px;max-width:850px;background:#f5f6f7;padding:12px;border-radius:7px;margin:0 0 12px}.offer-selector label{color:#4c555f;font-size:12px;font-weight:800}.offer-selector select{width:53%;max-width:265px;border:1px solid #d9dde2;border-radius:4px;height:40px;padding:0 9px;background:white;font-weight:700}.scenario-disclaimer{font-size:11px;color:#6d737c;line-height:1.6;margin:0 0 14px;max-width:850px}.scenario-disclaimer strong{color:#394049}.lease-fields{max-width:850px}.offer-headline{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#171a20;color:white;padding:24px 26px 14px;border-radius:6px 6px 0 0}.offer-headline-number{font-size:clamp(30px,5vw,52px);font-weight:560;letter-spacing:-1.5px;margin-top:8px}.offer-headline-number span{font-size:17px;color:#d2d4d8}.offer-pill{font-size:9px;letter-spacing:1.4px;color:#f3c6c6;border:1px solid #95555a;padding:7px;border-radius:3px}.offer-required{display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:11px 25px;background:#34373c;color:white;font-size:12px}.offer-required span{color:#d6d9de}.offer-fineprint{color:#6d7580;line-height:1.55;font-size:11px;background:#f4f5f6;padding:12px 15px;margin-bottom:15px}.lease-compare{display:grid;gap:6px;color:#737b82;background:#f6f8f6;padding:16px;border:1px solid #e2e9e3;font-size:11px;line-height:1.5;border-radius:5px}.lease-compare div:first-child{display:flex;gap:12px;align-items:center;justify-content:space-between;color:#3b444b;font-weight:700}.lease-compare strong{font-size:22px;color:#226e4a;white-space:nowrap}
+.snapshot-row{max-width:1120px;width:100%;margin:0 auto;border-radius:8px;background:#171a20;color:white;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 20px}.snapshot-row>div{display:flex;flex-direction:column;gap:5px}.snapshot-row span{font-size:9px;color:#bdc1c7;font-weight:700;letter-spacing:1.1px}.snapshot-row strong{font-size:22px;font-weight:600;letter-spacing:-.6px}.snapshot-row .snapshot-result strong{color:#b3ebc1}.snapshot-row.cost-higher .snapshot-result strong{color:#f1c2a4}.snapshot-row .snapshot-vs{font-size:22px;color:white}.snapshot-row button{border:1px solid #596069;background:#30343a;color:white;padding:10px 15px;border-radius:4px;white-space:nowrap;font-size:11px;font-weight:800}.comparison-caveat{font-size:11px;line-height:1.6;background:#f7f8f9;color:#5f6872;border-left:3px solid #e82127;padding:11px 13px;margin-bottom:16px}.comparison-table-note{font-size:11px;line-height:1.7;color:#727b85;margin:14px 0 0}.mobile-savings-dock{display:none}.cost-card .big{font-size:clamp(30px,4vw,43px)}
+@media(max-width:700px){.page{padding:0 13px 90px}.hero{height:175px}.hero-text{padding:20px}.hero h1{font-size:30px;letter-spacing:-1.3px}.hero p{font-size:11px;max-width:270px}.car{opacity:.11;right:-220px;bottom:-100px}.nav{height:58px}.navright .btn{display:none}.journey-intro h2{font-size:24px}.journey-intro{gap:12px;margin-bottom:13px}.journey-intro p{font-size:11px}.journey-progress{min-width:58px}.input-panel{padding:17px 12px}.journey-tabs{margin-bottom:10px}.journey-tab{font-size:9px;padding:12px 3px}.journey-tab span{display:block;margin:0 0 4px}.journey-slide{padding:17px 14px 22px}.slide-topline{margin-bottom:18px}.slide-topline span{font-size:8px}.journey-slide .step-head em{display:none}.slide-cta{flex-wrap:wrap;gap:8px}.slide-cta .btn{min-width:auto;flex:1}.slide-cta .inline-note{width:100%}.journey-footer{flex-wrap:wrap}.offer-selector{flex-wrap:wrap}.offer-selector select{width:100%;max-width:none}.offer-headline{padding:17px}.offer-required{padding:12px 17px}.row3{gap:8px}.snapshot-row{padding:14px 10px;gap:7px}.snapshot-row>div:nth-child(1),.snapshot-row>div:nth-child(3),.snapshot-row>.snapshot-vs{display:none}.snapshot-row strong{font-size:20px}.snapshot-row button{font-size:10px}.summary{padding:18px 15px}.summary h2{font-size:22px}.costs{gap:8px}.cost-card{padding:13px}.cost-card .big{font-size:clamp(21px,5vw,32px)}.cost-card .cap{font-size:9px}.impact{padding:15px}.impact-icon{min-width:40px;width:40px;height:40px;font-size:25px}.mobile-savings-dock{position:fixed;z-index:8000;left:10px;right:10px;bottom:8px;background:#171a20;color:white;border:1px solid #373b40;box-shadow:0 8px 32px #0005;border-radius:7px;padding:11px 13px;display:flex;justify-content:space-between;align-items:center;gap:10px}.mobile-savings-dock small{font-size:8px;color:#c7c9ce;letter-spacing:1.15px;display:block;margin-bottom:4px}.mobile-savings-dock strong{font-size:19px;color:#b3ebc1;letter-spacing:-.6px}.mobile-savings-dock.cost-higher strong{color:#f1c2a4}.mobile-savings-dock button{border:0;background:#e82127;color:white;padding:12px;border-radius:4px;font-size:10px;font-weight:800}.bar-block{margin-top:20px}.breakdown,.table-wrap{padding:19px 16px}}
+@media print{.journey-track{display:block!important;overflow:visible!important}.journey-slide{display:block!important;break-inside:avoid}.journey-tabs,.journey-footer,.snapshot-row,.mobile-savings-dock,.slide-cta,.offer-selector{display:none!important}.journey-window{overflow:visible}.workspace{display:block}.input-panel,.output-panel{width:100%;max-width:none}.offer-headline{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
+
+.journey-track{align-items:flex-start;transition:height .24s ease}.journey-slide{height:auto;align-self:flex-start}
+.ownership-disclosure{max-width:860px;border:1px solid #e1e5e9;border-radius:6px;background:#fafbfc;margin-top:17px;overflow:hidden}.ownership-disclosure summary{display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;list-style:none;padding:16px 17px}.ownership-disclosure summary::-webkit-details-marker{display:none}.ownership-disclosure summary strong{display:block;font-size:12px;color:#242a30;margin-bottom:5px}.ownership-disclosure summary small{font-size:10px;color:#797f86}.ownership-disclosure[open] .summary-chevron{transform:rotate(45deg)}.ownership-disclosure .summary-chevron{font-size:20px;color:#717982;transition:transform .15s}.ownership-disclosure .ownership-input{margin:0 12px 12px}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="nav"><div class="mark"><span class="mark-icon">↗</span><div>UPGRADE LAB<small>RETAIL CONCEPT</small></div></div><div class="navmid">Your next move · made clear</div><div class="navright"><span class="pill">Unofficial demo · Estimated figures</span><button class="btn btn-ghost" id="printTop">Print comparison ↗</button></div></header>
+<section class="hero"><div class="hero-text"><div class="tiny-line"></div><span class="eyebrow">Rethink your monthly drive</span><h1>What if your next car<br>costs less to drive?</h1><p>Make the real cost of driving visible. Compare your current vehicle with a new Tesla, including financing, energy and everyday ownership expenses.</p></div>
+<svg class="car" viewBox="0 0 900 420" fill="none" aria-label="Stylized electric vehicle silhouette" role="img" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bodyg" x1="0" y1="80" x2="660" y2="400" gradientUnits="userSpaceOnUse"><stop stop-color="#b6bcc2"/><stop offset=".35" stop-color="#5f6870"/><stop offset=".65" stop-color="#313a43"/><stop offset="1" stop-color="#10141a"/></linearGradient><linearGradient id="glass" x1="200" y1="100" x2="590" y2="240"><stop stop-color="#26313a"/><stop offset=".8" stop-color="#0a0f14"/></linearGradient></defs><ellipse cx="470" cy="357" rx="360" ry="30" fill="#050505" opacity=".55"/><path d="M54 277 Q72 251 145 244 L209 228 Q264 164 354 130 Q396 115 530 122 Q589 132 660 204 L750 221 Q818 230 837 270 L852 315 Q853 340 824 342 L768 342 Q772 299 740 276 Q710 252 680 272 Q647 292 656 342 L274 342 Q278 296 243 274 Q206 251 175 278 Q154 299 153 342 L93 342 Q65 336 55 312 Z" fill="url(#bodyg)" stroke="#a1a5aa" stroke-width="2"/><path d="M237 227 Q282 166 361 145 Q405 132 519 138 Q575 145 636 211 L611 220 Z" fill="url(#glass)" stroke="#78828b" stroke-width="2"/><path d="M403 146 L399 226" stroke="#818c95" stroke-width="3"/><path d="M643 213 L675 221" stroke="#1e252b" stroke-width="5"/><path d="M249 238 Q436 253 622 237" stroke="#ced3d7" stroke-opacity=".42" stroke-width="3"/><path d="M780 247 L824 268 L824 277 L786 276 Z" fill="#d6dedf"/><path d="M82 272 L129 257 L137 268 L83 286 Z" fill="#e2ecf2"/><path d="M132 344 L649 344" stroke="#9fa6ac" stroke-opacity=".4" stroke-width="3"/><circle cx="211" cy="331" r="60" fill="#111519" stroke="#777e87" stroke-width="7"/><circle cx="211" cy="331" r="39" fill="#353d45" stroke="#b3b7bc" stroke-width="2"/><circle cx="211" cy="331" r="15" fill="#9da3a9"/><path d="M211 293V318 M173 331H198 M211 344V368 M225 331H249" stroke="#808a92" stroke-width="9"/><circle cx="715" cy="331" r="60" fill="#111519" stroke="#777e87" stroke-width="7"/><circle cx="715" cy="331" r="39" fill="#353d45" stroke="#b3b7bc" stroke-width="2"/><circle cx="715" cy="331" r="15" fill="#9da3a9"/><path d="M715 293V318 M677 331H702 M715 344V368 M729 331H753" stroke="#808a92" stroke-width="9"/><path d="M340 249L367 251" stroke="#101318" stroke-width="5" stroke-linecap="round"/><path d="M542 248L570 249" stroke="#101318" stroke-width="5" stroke-linecap="round"/></svg>
+</section>
+<div class="section-head"><h2>The upgrade story, three easy swipes</h2><small>New results after every edit · Scroll down for the full picture.</small></div>
+<main class="workspace">
+<section class="input-panel" id="journey" aria-labelledby="journeyTitle">
+<div class="input-header"><span>Customer journey · 3 screens</span><button type="button" id="reset">Reset sample</button></div>
+<div class="journey-intro"><div><span class="offer-label">Retail conversion concept</span><h2 id="journeyTitle">See what driving electric could look like.</h2><p>Swipe through the three quick screens, then scroll down to compare the full costs.</p></div><div class="journey-progress"><span id="screenCount">01 / 03</span><span class="progress-line"><i id="progressFill"></i></span></div></div>
+<nav class="journey-tabs" aria-label="Scenario pages"><button class="journey-tab active" data-go="0" type="button" aria-current="step"><span>01</span> Current vehicle</button><button class="journey-tab" data-go="1" type="button"><span>02</span> Daily driving</button><button class="journey-tab" data-go="2" type="button"><span>03</span> New Tesla</button></nav>
+<div class="journey-window"><div id="journeyTrack" class="journey-track" tabindex="0" aria-label="Swipe sideways between three customer screens">
+ <article class="journey-slide" data-slide="0"><div class="slide-topline">CURRENT VEHICLE <span>1 OF 3 · START HERE</span></div><div class="step-head"><span class="step-num">01</span><h3>Current vehicle</h3><em>What they drive today</em></div>
+<div class="field"><label for="vin">VIN lookup <em>Optional · NHTSA</em></label><div class="vinrow"><input id="vin" placeholder="17-character VIN" maxlength="17" autocomplete="off"><button id="decodeVIN" type="button">Decode VIN</button></div><span id="vinstatus" class="vinstatus">VIN lookup uses NHTSA; EPA fuel economy may require choosing a trim. No loan or repair history is retrieved.</span></div>
+<div class="field"><label for="vehicle">Vehicle description</label><input id="vehicle" value="2021 Gasoline SUV" placeholder="e.g. 2021 Honda CR-V"></div>
+<div class="row2"><div class="field"><label for="balance">Loan payoff estimate ($)</label><input id="balance" type="number" min="0" step="100" value="28000"></div><div class="field"><label for="oldapr">Current APR (%)</label><input id="oldapr" type="number" min="0" max="50" step=".01" value="8.4"></div></div>
+<div class="row2"><div class="field"><label for="oldterm">Months remaining</label><input id="oldterm" type="number" min="1" max="120" step="1" value="60"></div><div class="field"><label for="actualpay">Actual monthly payment ($) <em>Optional</em></label><input id="actualpay" type="number" min="0" step="1" placeholder="Use calculated"></div></div>
+<div class="row2"><div class="field"><label for="trade">Estimated trade-in ($)</label><input id="trade" type="number" min="0" step="100" value="26000"></div><div class="field"><label for="type">Vehicle powertrain</label><select id="type"><option value="gas">Gasoline</option><option value="ev">Electric</option></select></div></div>
+<div class="slide-cta"><span class="inline-note">You can decode a VIN or enter the vehicle manually.</span><button type="button" class="btn" data-go="1">Daily driving →</button></div></article>
+ <article class="journey-slide" data-slide="1"><div class="slide-topline">DAILY DRIVING <span>2 OF 3 · PERSONALIZE</span></div><div class="step-head"><span class="step-num">02</span><h3>Daily driving</h3><em>Fuel + upkeep</em></div>
+<div class="mileage-head"><label for="miles">How much do they drive?</label><div class="segmented" id="mileUnit"><button type="button" data-unit="weekly">Weekly</button><button type="button" data-unit="monthly">Monthly</button><button type="button" class="active" data-unit="yearly">Yearly</button></div></div>
+<div class="field"><input id="miles" type="number" min="0" step="100" value="18000"><div class="inline-note" id="milesExplain">18,000 estimated miles per year.</div></div>
+<div class="row2"><div class="field"><label id="oldEffLabel" for="eff">Current efficiency (MPG)</label><input id="eff" type="number" min="1" max="300" step=".1" value="23"></div><div class="field"><label id="oldEnergyPriceLabel" for="gasprice">Gasoline ($/gal)</label><input id="gasprice" type="number" min="0" max="20" step=".01" value="3.8"></div></div>
+<div class="row3"><div class="field"><label for="oldins">Insurance ($/mo)</label><input id="oldins" type="number" min="0" value="155"></div><div class="field"><label for="oldmaint">Maintenance ($/mo)</label><input id="oldmaint" type="number" min="0" value="130"></div><div class="field"><label for="oldother">Other ($/yr) <em>e.g. registration</em></label><input id="oldother" type="number" min="0" value="240"></div></div>
+
+<details class="ownership-disclosure" id="ownershipDetails"><summary><span><strong>Advanced ownership intelligence</strong><small>VIN-based fuel economy, AAA category averages, depreciation</small></span><span class="summary-chevron">＋</span></summary><div class="ownership-input" id="ownershipEstimator">
+  <div class="eyebrow-small">Vehicle ownership intelligence</div>
+  <div class="ownership-info">Decode a VIN, then match an EPA configuration for fuel economy. Maintenance and insurance benchmarks are <strong>2026 AAA vehicle-category averages for new cars</strong> — not verified averages for this exact used VIN.</div>
+  <div class="field"><label for="ownerClass">Comparable vehicle category <em>Review this match</em></label>
+    <select id="ownerClass">
+      <option value="weighted">All vehicles · weighted reference</option>
+      <option value="smallSedan">Small sedan</option>
+      <option value="mediumSedan">Medium sedan</option>
+      <option value="subSUV">Subcompact SUV</option>
+      <option value="compactSUV" selected>Compact SUV</option>
+      <option value="mediumSUV">Medium SUV</option>
+      <option value="midPickup">Midsize pickup</option>
+      <option value="halfPickup">Half-ton pickup</option>
+    </select>
+  </div>
+  <div id="epaMatch" class="epa-match" aria-live="polite"><div class="field" style="margin:0"><label for="epaVariant">Select exact EPA vehicle configuration</label><select id="epaVariant"><option value="">Choose engine / drivetrain</option></select></div><button type="button" id="applyEPA" class="feature-btn">Apply EPA fuel economy</button></div>
+  <div class="row2">
+    <div class="field"><label for="maintRate">AAA maintenance + repairs + tires ($/mile)</label><input id="maintRate" type="number" min="0" max="2" step=".001" value=".1206"></div>
+    <div class="field"><label for="deprate">Estimated value decline (%/year)</label><input id="deprate" type="number" min="0" max="100" step=".5" value="10"></div>
+  </div>
+  <label class="ownership-check"><input id="autoMaint" type="checkbox"> Auto-calculate maintenance using annual miles × category rate (overwrites current maintenance field)</label>
+  <button type="button" id="applyAAABenchmarks" class="feature-btn">Use AAA category insurance + upkeep estimates</button>
+  <div class="ownership-meta" id="ownerClassStatus">2026 AAA compact-SUV new-car reference: 12.06¢/mile upkeep and $2,294/year full-coverage insurance.</div>
+  <div class="ownership-info" style="margin-bottom:0">Depreciation is an <strong>editable assumption</strong> applied to estimated trade-in value. Annual economic cost includes interest, <em>not</em> loan principal. <a href="https://newsroom.aaa.com/2026/09/aaa-new-vehicle-ownership-costs-hit-12863-annually/" target="_blank" rel="noopener noreferrer">AAA methodology ↗</a></div>
+</div>
+</details>
+<div class="slide-cta"><button type="button" class="btn btn-ghost" data-go="0">← Previous</button><button type="button" class="btn" data-go="2">New Tesla →</button></div></article>
+ <article class="journey-slide" data-slide="2"><div class="slide-topline">YOUR NEXT TESLA <span>3 OF 3 · EXPLORE</span></div><div class="step-head"><span class="step-num">03</span><h3>New Tesla scenario</h3><em>Offer assumptions</em></div>
+<div class="field"><label for="model">Tesla model</label><select id="model"><option value="Model Y" selected>Model Y</option><option value="Model 3">Model 3</option><option value="Model S">Model S</option><option value="Model X">Model X</option><option value="Cybertruck">Cybertruck</option></select></div>
+<div class="offer-selector">
+  <label for="dealType">Compare a Tesla with</label>
+  <select id="dealType" aria-label="Choose lease or financing"><option value="lease" selected>Lease offer</option><option value="finance">Promotional financing</option></select>
+</div>
+<div class="scenario-disclaimer"><strong>Illustrative best-eligible scenario.</strong> Starts with the standard vehicle and editable promotional assumptions, not a current Tesla quote. No offer eligibility or expiration is implied.</div>
+<div id="leaseFields" class="lease-fields">
+  <div class="offer-headline"><div><span class="offer-label">Example advertised lease payment</span><div class="offer-headline-number" id="leaseHeroAmount">$399<span> /mo</span></div></div><span class="offer-pill">DEMO · UNVERIFIED</span></div>
+  <div class="offer-required"><b id="leaseDueVisible">$3,500 due at signing</b><span id="leaseTermsVisible">36 months · 15,000 miles / year</span></div>
+  <div class="offer-fineprint">Base-model example · payment shown before unentered taxes/fees · subject to credit approval, mileage limits, available offers and official quote. Due at signing can include the first payment.</div>
+  <div class="row2"><div class="field"><label for="leasePayment">Advertised payment ($/mo)</label><input id="leasePayment" type="number" min="0" value="399"></div><div class="field"><label for="leaseDue">Total due at signing ($)</label><input id="leaseDue" type="number" min="0" value="3500"></div></div>
+  <div class="row2"><div class="field"><label for="leaseTerm">Lease term (months)</label><select id="leaseTerm"><option value="24">24</option><option value="36" selected>36</option><option value="48">48</option></select></div><div class="field"><label for="leaseMiles">Included miles per year</label><select id="leaseMiles"><option value="10000">10,000</option><option value="12000">12,000</option><option value="15000" selected>15,000</option><option value="18000">18,000</option></select></div></div>
+  <div class="row2"><div class="field"><label for="leaseOverage">Illustrative excess mileage ($/mi)</label><input id="leaseOverage" type="number" min="0" step=".01" value="0.25"></div><div class="field"><label for="leaseMonthlyTaxes">Confirmed taxes/fees ($/mo) <em>Enter if known</em></label><input id="leaseMonthlyTaxes" type="number" min="0" step="1" value="0"></div></div>
+  <div class="lease-compare"><div>Illustrative lease cost, normalized for comparison <strong id="leaseEquivalent">—</strong></div><div>Includes upfront and excess-mile allowance adjustment; may exclude taxes/fees.</div></div>
+</div>
+<div id="financeFields" class="finance-fields"><div class="rate-card"><span class="offer-label">Promotional financing scenario</span><div class="mt">Tesla pricing and APR are <b>editable demo assumptions</b>, not a live quote. Verify eligibility, term and current offers in Tesla's official Design Studio.</div></div>
+<div class="row2"><div class="field"><label for="price">Vehicle price ($)</label><input id="price" type="number" min="0" step="100" value="44990"></div><div class="field"><label for="newapr">Illustrative APR (%)</label><input id="newapr" type="number" min="0" max="50" step=".01" value="1.99"></div></div>
+<div class="row2"><div class="field"><label for="newterm">Loan term (months)</label><select id="newterm"><option value="36">36</option><option value="48">48</option><option value="60">60</option><option value="72" selected>72</option><option value="84">84</option></select></div><div class="field"><label for="down">Cash down payment ($)</label><input id="down" type="number" min="0" step="100" value="3500"></div></div>
+<div class="row2"><div class="field"><label for="taxes">Taxes + fees ($) <em>To be financed</em></label><input id="taxes" type="number" min="0" step="100" value="2500"></div><div class="field"><label for="credit">Verified discounts ($)</label><input id="credit" type="number" min="0" step="100" value="0"></div></div>
+</div><!-- financeFields -->
+<div class="field"><label for="evEff">Tesla energy consumption (kWh/100 mi)</label><input id="evEff" type="number" min="1" max="100" step=".1" value="28"></div>
+<div class="row2"><div class="field"><label for="homecost">Home electricity ($/kWh)</label><input id="homecost" type="number" min="0" max="5" step=".01" value=".18"></div><div class="field"><label for="publiccost">Public charging ($/kWh)</label><input id="publiccost" type="number" min="0" max="5" step=".01" value=".42"></div></div>
+<div class="field"><label for="homeShare">Home charging share <em id="shareLabel">70%</em></label><input id="homeShare" style="height:24px;padding:0;accent-color:#171a20" type="range" min="0" max="100" value="70"></div>
+<div class="row3"><div class="field"><label for="newins">Insurance ($/mo)</label><input id="newins" type="number" min="0" value="175"></div><div class="field"><label for="newmaint">Maintenance ($/mo)</label><input id="newmaint" type="number" min="0" value="45"></div><div class="field"><label for="newother">Other ($/yr)</label><input id="newother" type="number" min="0" value="300"></div></div>
+<div class="field"><label for="charger">One-time home charger setup ($) <em>Upfront, not monthly</em></label><input id="charger" type="number" min="0" step="50" value="0"></div>
+<div id="loanWarn"></div>
+<div class="slide-cta"><button type="button" class="btn btn-ghost" data-go="1">← Previous</button><button type="button" class="btn btn-red" data-see-results>Reveal the comparison ↓</button></div></article>
+</div></div>
+<div class="journey-footer"><div class="journey-arrow-group"><button type="button" id="journeyPrev" aria-label="Previous screen">←</button><span id="journeyDots">● ○ ○</span><button type="button" id="journeyNext" aria-label="Next screen">→</button></div><button type="button" id="jumpBreakdown" class="jump-breakdown">Swipe up / view the savings ↓</button></div>
+</section>
+<div class="snapshot-row" id="snapshotRow" aria-live="polite"><div><span>ESTIMATED CURRENT MONTHLY</span><strong id="snapCurrent">—</strong></div><span class="snapshot-vs">→</span><div><span>TESLA MONTHLY EQUIVALENT</span><strong id="snapTesla">—</strong></div><div class="snapshot-result"><span>ESTIMATED DIFFERENCE</span><strong id="snapDelta">—</strong></div><button type="button" data-see-results>Breakdown ↓</button></div>
+<section class="output-panel" aria-live="polite">
+<div class="summary"><div class="summary-top"><span class="upper">01 / The monthly difference</span><span class="sample">Live calculation · Demo inputs</span></div><h2>Your next move, in real numbers.</h2>
+<div class="comparison-caveat" id="comparisonCaveat" aria-live="polite">Estimated comparison. Review all assumptions and upfront costs before quoting.</div><div class="costs"><div class="cost-card"><div class="cap" id="oldCardLabel">Current vehicle</div><div class="big" id="oldTotal">—</div><small>Estimated monthly outflow</small></div><div class="cost-card tesla"><div class="cap" id="newCardLabel">New Model Y</div><div class="big" id="newTotal">—</div><small id="teslaOutflowCaption">Monthly estimated cost, including energy and upkeep</small></div></div>
+<div class="impact" id="impact"><div><div class="cap" id="impactCap">Estimated monthly savings</div><div class="big" id="monthlyDiff">—</div><p id="impactText">—</p></div><div class="impact-icon" id="impactIcon">↘</div></div></div>
+<div class="breakdown"><div class="block-title"><h3>Where the money goes.</h3><span>MONTHLY EXPENSE MIX</span></div><div class="bar-block"><div class="bar-heading"><span id="barOldLabel">CURRENT VEHICLE</span><span id="barOldTotal">—</span></div><div class="bar" id="oldBar"></div></div><div class="bar-block"><div class="bar-heading"><span id="barNewLabel">MODEL Y</span><span id="barNewTotal">—</span></div><div class="bar tesla" id="newBar"></div></div><div class="key"><span><i class="c-loan"></i>Financing</span><span><i class="c-fuel"></i>Energy</span><span><i class="c-ins"></i>Insurance</span><span><i class="c-maint"></i>Maintenance</span><span><i class="c-other"></i>Other</span></div></div>
+<div class="table-wrap"><div class="block-title"><h3>A side-by-side breakdown.</h3><span>ESTIMATED CASH FLOW</span></div><table class="detail-table"><thead><tr><th>Monthly expense</th><th>Today</th><th>New Tesla</th></tr></thead><tbody><tr><td id="newPaymentRowName">Loan payment / Tesla lease equivalent</td><td id="oldLoan">—</td><td id="newLoan">—</td></tr><tr><td>Fuel / electricity</td><td id="oldFuel">—</td><td id="newFuel">—</td></tr><tr><td>Insurance</td><td id="oldInsurance">—</td><td id="newInsurance">—</td></tr><tr><td>Maintenance</td><td id="oldMaintenance">—</td><td id="newMaintenance">—</td></tr><tr><td>Other expenses</td><td id="oldMisc">—</td><td id="newMisc">—</td></tr><tr><td>Total per month</td><td id="oldAll">—</td><td id="newAll">—</td></tr><tr><td>Total per year*</td><td id="oldYear">—</td><td id="newYear">—</td></tr></tbody></table><p id="cashFlowNote" class="comparison-table-note">*Annualized estimate. Real-world expenses and offer terms may vary.</p></div>
+
+<div class="owner-results" id="ownerResults">
+  <div class="result-head"><span class="eyebrow-small" style="color:#c51f25;font-size:10px;letter-spacing:1.5px;font-weight:800;text-transform:uppercase">Current vehicle · ownership forecast</span><span class="ownership-source" id="ownerSourceTag">Illustrative inputs</span></div>
+  <h3 id="ownerTitle">Your current vehicle's estimated annual costs</h3>
+  <div class="owner-summary-grid">
+    <div class="owner-summary"><label>Annual cash outflow · incl. loan payments</label><strong id="ownerCashYear">—</strong><span id="ownerCashMonth">— / month</span></div>
+    <div class="owner-summary dark"><label>Estimated economic ownership cost · per year</label><strong id="ownerEconomicYear">—</strong><span id="ownerEconomicMonth">— / month equivalent</span></div>
+  </div>
+  <table class="owner-owner-table"><tbody>
+    <tr><td>Fuel / energy</td><td id="ownerEnergyYear">—</td></tr>
+    <tr><td>Insurance</td><td id="ownerInsYear">—</td></tr>
+    <tr><td>Maintenance, repairs + tires</td><td id="ownerMaintYear">—</td></tr>
+    <tr><td>Registration / other</td><td id="ownerOtherYear">—</td></tr>
+    <tr><td>Est. loan interest in next 12 months</td><td id="ownerInterestYear">—</td></tr>
+    <tr><td>Estimated annual depreciation (noncash)</td><td id="ownerDepYear">—</td></tr>
+    <tr><td><strong>Economic annual cost (principal excluded)</strong></td><td id="ownerEconomicTable">—</td></tr>
+  </tbody></table>
+  <div class="owner-owner-note" id="ownerDisclaimer">Model-class upkeep benchmarks are not actual maintenance costs for this VIN. Insurance and registration require confirmation; depreciation is assumed, not retrieved. Do not add economic cost to the cash-outflow comparison.</div>
+</div>
+<div class="substats"><div class="stat"><label id="energyLabel">Energy savings / year</label><strong id="energySavings">—</strong></div><div class="stat"><label>Trade-in equity</label><strong id="equity">—</strong></div><div class="stat"><label id="financedLabel">New loan amount</label><strong id="financed">—</strong></div></div>
+</section>
+</main>
+<div class="mobile-savings-dock" id="mobileSavingsDock"><div><small>ESTIMATED MONTHLY DIFFERENCE</small><strong id="dockDelta">—</strong></div><button type="button" data-see-results>See breakdown ↓</button></div>
+
+<section class="locator-section" id="chargingLocator" aria-labelledby="locatorHeading">
+  <header class="locator-header">
+    <div><span class="eyebrow">04 / Find your charging advantage</span><h2 id="locatorHeading">No home charger? No problem.</h2>
+    <p>Search around home, work, or anywhere you park. Discover nearby charging locations, compare a confirmed station rate with Supercharging, and apply it to your Tesla ownership calculation.</p></div>
+    <span class="locator-flag">APARTMENT-FRIENDLY CHARGING</span>
+  </header>
+  <div class="locator-grid">
+    <div class="locator-sidebar">
+      <div class="locator-fieldhead">Where would you like to charge?</div>
+      <div class="locator-tabs" role="group" aria-label="Address type">
+        <button type="button" class="active" data-location="home" aria-pressed="true">⌂ &nbsp; Home</button>
+        <button type="button" data-location="work" aria-pressed="false">▣ &nbsp; Work</button>
+        <button type="button" data-location="other" aria-pressed="false">⌖ &nbsp; Other</button>
+      </div>
+      <form id="chargerSearchForm">
+        <label class="locator-fieldhead" for="locAddress">Street address, ZIP, or place</label>
+        <div class="locator-row"><input id="locAddress" type="text" autocomplete="street-address" placeholder="e.g. Rockville Town Square, MD" maxlength="220" required aria-label="Search charging near an address"/><button type="submit" class="btn" id="locSearch">Find chargers ↗</button></div>
+        <div class="locator-hint">Only searches when you press Find chargers. Address is sent to an external geocoder and is not saved in this demo. For privacy, a nearby landmark or ZIP works too.</div>
+      </form>
+      <div class="locator-filters">
+        <div class="locator-setting"><label for="searchRadius">Search radius</label><select id="searchRadius"><option value="1">1 mile</option><option value="3" selected>3 miles</option><option value="5">5 miles</option><option value="10">10 miles</option></select></div>
+        <div class="locator-setting"><label for="superRate">Supercharger benchmark ($/kWh)</label><input id="superRate" type="number" min="0" max="5" step=".01" value="0.43" aria-label="Supercharger benchmark dollars per kilowatt hour"/></div>
+      </div>
+      <label class="locator-check"><input type="checkbox" id="cheaperOnly"/> Show only stations with a listed or Advisor-entered rate below the benchmark</label>
+      <button class="locator-apartment" id="apartmentMode" type="button"><span>Apartment / no home charging</span><span id="apartmentIndicator">Set home share to 0% ↗</span></button>
+      <div class="locator-snapshot" aria-live="polite">
+        <div class="locator-snapshot-top"><span>Charging cost comparison</span><strong id="locatorDistance">1,500 miles / month</strong></div>
+        <div class="locator-number" id="locatorBenchmarkCost">—</div>
+        <div class="locator-stats"><div>Supercharging estimate<strong id="locatorSuperCost">—</strong></div><div>Selected station rate<strong id="locatorChosenRate">Not selected</strong></div></div>
+        <div class="station-advice" id="locatorSavingsNote">Enter a confirmed rate at a charging station to see potential savings and use it in the ownership calculator.</div>
+      </div>
+      <hr class="locator-divider"/>
+      <div class="locator-results-head"><strong>Charging locations</strong><span id="locatorCount">Search an area to begin</span></div>
+      <div id="locatorStatus" class="locator-status" role="status">Map preview is centered on Rockville, Maryland. Enter any home, work or custom location to discover charging stations nearby.</div>
+      <div id="stationList" class="station-list" aria-live="polite"></div>
+      <div class="station-advice">A charger on the map does not guarantee a compatible connector, public access, an open stall, or a lower price. Confirm live costs and fees in the network app before quoting.</div>
+    </div>
+    <div class="locator-map-wrap">
+      <div id="chargerMap" role="application" aria-label="Nearby EV charging station map"></div>
+      <div id="chargerMapFallback" class="locator-map-fallback">Internet access is needed to display map tiles. You can still use the charging cost comparison and find locations in the supported charging apps.</div>
+      <div class="locator-map-help"><span class="locator-map-label" id="mapAreaLabel">DEMO VIEW · Rockville, MD<br/>Search an address to load live map listings.</span></div>
+      <div class="locator-map-legend"><span><i style="background:#1a744a"></i>Below benchmark*</span><span><i style="background:#e82127"></i>At / above benchmark*</span><span><i style="background:#717780"></i>Price unavailable</span></div>
+    </div>
+  </div>
+  <footer class="locator-footer">Station locations and connector tags: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>, fetched through Overpass. Address search: <a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon</a> demo service. *Price comparisons use community-listed or Advisor-entered amounts, not verified live tariffs; hourly, parking, service, idle and access fees may apply. <a href="https://www.chargepoint.com/drivers" target="_blank" rel="noopener noreferrer">Verify ChargePoint prices ↗</a> · <a href="https://www.plugshare.com/" target="_blank" rel="noopener noreferrer">Browse PlugShare ↗</a></footer>
+</section>
+
+<section class="action-strip"><div><b id="ctaTitle">Ready to compare the real offer?</b><p>Carry the scenario into Tesla's official configurator to verify live prices, available offers and trade-in terms.</p></div><div class="ctas"><button id="print" class="btn btn-ghost">Print / Save PDF</button><a id="order" href="https://www.tesla.com/modely/design" target="_blank" rel="noopener noreferrer" class="btn btn-red">Explore Tesla Configurator ↗</a></div></section>
+<div class="bottom-note">*Annual costs assume the displayed monthly payments continue for 12 months. Cash-flow comparison and one-year economic ownership forecast are different measures and must not be added together. Economic ownership cost includes estimated depreciation and next-year interest but excludes loan principal; it is not a vehicle-specific historical average or lifetime forecast. Existing and new loans may mature at different dates. Charging calculations exclude charging losses, which can vary. Costs exclude items not entered, changes to fuel prices, unusual repairs, financing contingencies, sales taxes not captured in the tax/fee field and possible loan constraints. Trade-in value, vehicle pricing, incentives and APR must be independently verified. The actual payment can differ due to payoff timing, origination fees, state taxes and financing requirements. This independent demonstration is not affiliated with, approved by or an official quote from Tesla.</div>
+<footer class="foot"><span>UPGRADE LAB — INDEPENDENT RETAIL CONCEPT</span><span>Built for clear, informed upgrade conversations.</span></footer>
+</div>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const cfg={"Model Y":{price:44990,eff:28,url:'https://www.tesla.com/modely/design'},"Model 3":{price:39990,eff:25.4,url:'https://www.tesla.com/model3/design'},"Model S":{price:79990,eff:31,url:'https://www.tesla.com/models/design'},"Model X":{price:89990,eff:34,url:'https://www.tesla.com/modelx/design'},"Cybertruck":{price:69990,eff:42,url:'https://www.tesla.com/cybertruck/design'}};
+const ids=['vehicle','balance','oldapr','oldterm','actualpay','trade','type','miles','eff','gasprice','oldins','oldmaint','oldother','model','price','newapr','newterm','down','taxes','credit','evEff','homecost','publiccost','homeShare','newins','newmaint','newother','charger'];
+const initial=Object.fromEntries(ids.map(id=>[id,$(id).value]));
+// Source: AAA 2026 Your Driving Costs brochure, pages 1–2. Per-mile maintenance
+// and annual insurance/registration are averages across selected NEW 2026 models,
+// not exact used-car/VIN costs. Values should never be labeled VIN-specific.
+const ownershipBenchmarks={
+ weighted:{label:'All vehicles · weighted reference',maint:.1173,insurance:2098,fees:802},
+ smallSedan:{label:'Small sedan',maint:.1110,insurance:1623,fees:512},
+ mediumSedan:{label:'Medium sedan',maint:.1142,insurance:1788,fees:675},
+ subSUV:{label:'Subcompact SUV',maint:.1162,insurance:2169,fees:587},
+ compactSUV:{label:'Compact SUV',maint:.1206,insurance:2294,fees:741},
+ mediumSUV:{label:'Medium SUV',maint:.1216,insurance:2469,fees:867},
+ midPickup:{label:'Midsize pickup',maint:.1126,insurance:1867,fees:830},
+ halfPickup:{label:'Half-ton pickup',maint:.1182,insurance:2134,fees:1078}
+};
+let matchedVehicle=null,epaVehicles=new Map(),ownershipOrigin='Illustrative inputs',suppressMaintenanceChange=false;
+function ownerBench(){return ownershipBenchmarks[$('ownerClass').value]||ownershipBenchmarks.weighted;}
+function ownershipBenchmarkInfo(){const b=ownerBench();setText('ownerClassStatus',`2026 AAA ${b.label.toLowerCase()} reference: ${(b.maint*100).toFixed(2)}¢/mi upkeep, ${money(b.insurance)}/year insurance. New vehicles only, not a quote for this VIN.`);}
+function assignClass(key){if(!ownershipBenchmarks[key])key='weighted';$('ownerClass').value=key;$('maintRate').value=ownershipBenchmarks[key].maint;ownershipBenchmarkInfo();refreshMaintenance();}
+function refreshMaintenance(){if($('autoMaint').checked){$('oldmaint').value=(annualMiles*num('maintRate')/12).toFixed(2);}}
+function estimateClass(body='',model='',size=''){
+ const src=(body+' '+size).toLowerCase(),name=model.toLowerCase();
+ const smallSUV=/hr-v|kona|trax|cx-30|crosstrek|corolla cross|venue|kick|trailblazer|bronco sport/.test(name);
+ if(smallSUV)return 'subSUV';
+ if(/rav4|cr-v|crv|forester|cx-5|cx5|tucson|rogue|escape|sportage|equinox|model y|id\.4/.test(name))return 'compactSUV';
+ if(/highlander|pilot|explorer|telluride|palisade|sorento|grand cherokee|traverse|pathfinder|model x/.test(name))return 'mediumSUV';
+ if(/f[- ]?150|silverado|sierra|ram 1500|tundra/.test(name))return 'halfPickup';
+ if(/tacoma|ranger|colorado|frontier|ridgeline|gladiator/.test(name))return 'midPickup';
+ if(/accord|camry|altima|sonata|k5|model 3|model s/.test(name))return 'mediumSedan';
+ if(/civic|corolla|elantra|sentra|mazda ?3|jetta|impreza/.test(name))return 'smallSedan';
+ if(/pickup|truck/.test(src))return 'midPickup';
+ if(/small sport utility|subcompact|mini sport utility/.test(src))return 'subSUV';
+ if(/standard sport utility|medium suv|midsize suv|large sport utility/.test(src))return 'mediumSUV';
+ if(/compact sport utility|sport utility|suv|crossover/.test(src))return 'compactSUV';
+ if(/compact car|small car|small sedan/.test(src))return 'smallSedan';
+ if(/mid-size|midsize|large car|sedan|saloon/.test(src))return 'mediumSedan';
+ return 'weighted';
+}
+function interestNextYear(balance,apr,monthlyPayment,months){
+ let loan=balance,interest=0,r=apr/1200;
+ for(let month=0;month<Math.min(12,months)&&loan>.000001;month++){
+  const due=loan*r;interest+=due;
+  // A customer-supplied payment may not amortize within stated months.
+  loan=Math.max(0,loan+due-Math.max(due,monthlyPayment));
+ }
+ return interest;
+}
+
+let unit='yearly', annualMiles=18000;
+const money=(n,d=0)=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:d,maximumFractionDigits:d}).format(Number.isFinite(n)?n:0);
+const num=(id)=>{let v=Number($(id).value);return Number.isFinite(v)?Math.max(0,v):0;};
+const pmnt=(principal,apr,term)=>{if(principal<=0||term<=0)return 0;let r=apr/1200;return r===0?principal/term:principal*r/(1-Math.pow(1+r,-term));};
+const getFactor=()=>unit==='weekly'?52:unit==='monthly'?12:1;
+function showMiles(){let factor=getFactor();$('miles').value=+(annualMiles/factor).toFixed(unit==='yearly'?0:1);const miles=Number.isFinite(annualMiles)?Math.round(annualMiles).toLocaleString('en-US'):0;$('milesExplain').textContent=`${miles} estimated miles per year.`;document.querySelectorAll('[data-unit]').forEach(b=>b.classList.toggle('active',b.dataset.unit===unit));}
+function setText(id,value){$(id).textContent=value;}
+function calc(){
+const m=annualMiles, balance=num('balance'), oldApr=num('oldapr'), term=num('oldterm'), trade=num('trade');const calculated=pmnt(balance,oldApr,term);const override=$('actualpay').value.trim();const oldPay=override!==''?num('actualpay'):calculated;
+const currentIsEV=$('type').value==='ev', efficiency=Math.max(.01,num('eff')), fuelRate=num('gasprice');const oldEnergy=currentIsEV?(m/100*efficiency*fuelRate/12):(m/efficiency*fuelRate/12);
+const oldInsurance=num('oldins'), oldMaintenance=num('oldmaint'),oldOther=num('oldother')/12;
+const oldComponents=[oldPay,oldEnergy,oldInsurance,oldMaintenance,oldOther];const oldTotal=oldComponents.reduce((a,b)=>a+b,0);
+const equity=trade-balance, posEquity=Math.max(0,equity), negEquity=Math.max(0,-equity);
+const gross=num('price')+num('taxes')-num('credit')-num('down')-posEquity+negEquity;
+const principal=Math.max(0,gross);
+const leaseMode=$('dealType').value==='lease';
+const leaseTerm=Math.max(1,num('leaseTerm'));
+const leaseDue=num('leaseDue'), leasePayment=num('leasePayment');
+const overageMiles=Math.max(0,m-num('leaseMiles'));
+const overageCost=overageMiles*num('leaseOverage')/12;
+// Lease payment #1 is assumed INCLUDED in the due-at-signing total.
+// Economic equivalent spreads the stated due at signing across the term;
+// negative trade equity is a separately disclosed obligation, not hidden in the price.
+const leaseEquivalent=((leasePayment*(leaseTerm-1)+leaseDue+negEquity)/leaseTerm)+overageCost+num('leaseMonthlyTaxes');
+const newPay=leaseMode?leaseEquivalent:pmnt(principal,num('newapr'),num('newterm'));
+const avgCharge=num('homecost')*(num('homeShare')/100)+num('publiccost')*(1-num('homeShare')/100);
+const newEnergy=m/100*num('evEff')*avgCharge/12;
+const newInsurance=num('newins'), newMaintenance=num('newmaint'),newOther=num('newother')/12;
+const newComponents=[newPay,newEnergy,newInsurance,newMaintenance,newOther];const newTotal=newComponents.reduce((a,b)=>a+b,0);
+
+// Annual cash flow is different from economic total ownership cost.
+// Economic cost replaces principal repayment with depreciation and loan interest.
+const annualInterest=interestNextYear(balance,oldApr,oldPay,term);
+const annualDepreciation=trade*num('deprate')/100;
+const annualEconomic=(oldEnergy+oldInsurance+oldMaintenance+oldOther)*12+annualInterest+annualDepreciation;
+setText('ownerTitle',($('vehicle').value.trim()||'Current vehicle')+' · annual ownership estimate');
+setText('ownerSourceTag',ownershipOrigin);
+setText('ownerCashYear',money(oldTotal*12));setText('ownerCashMonth',money(oldTotal)+'/mo');
+setText('ownerEconomicYear',money(annualEconomic));setText('ownerEconomicMonth',money(annualEconomic/12)+'/mo equivalent');
+for(const [id,value] of [['ownerEnergyYear',oldEnergy*12],['ownerInsYear',oldInsurance*12],['ownerMaintYear',oldMaintenance*12],['ownerOtherYear',oldOther*12],['ownerInterestYear',annualInterest],['ownerDepYear',annualDepreciation],['ownerEconomicTable',annualEconomic]])setText(id,money(value));
+setText('ownerDisclaimer',`Cost forecast for ${annualMiles.toLocaleString('en-US',{maximumFractionDigits:0})} miles/year. Upkeep benchmark: ${ownerBench().label} (AAA 2026, new cars) if applied; current insurance and fees are editable inputs, not VIN records. Depreciation assumes ${num('deprate')}% of the ${money(trade)} trade-in estimate; loan interest is modeled for up to 12 payments. Economic cost excludes loan principal and should not be added to the cash-outflow comparison.`);
+const difference=oldTotal-newTotal;
+setText('oldTotal',money(oldTotal));setText('newTotal',money(newTotal));
+const offerDueText=`${money(leaseDue)} due at signing`;
+setText('leaseHeroAmount',money(leasePayment)+'/mo');
+setText('leaseDueVisible',offerDueText);
+setText('leaseTermsVisible',`${leaseTerm} months · ${num('leaseMiles').toLocaleString('en-US')} mi/year`);
+setText('leaseEquivalent',money(leaseEquivalent)+'/mo');
+setText('teslaOutflowCaption',leaseMode?'Est. monthly equivalent including upfront + excess miles':'Estimated monthly cash outflow');
+setText('comparisonCaveat',leaseMode?`LEASE DEMO, NOT A LIVE OFFER · Advertised ${money(leasePayment)}/mo, ${offerDueText}, ${leaseTerm} months, ${num('leaseMiles').toLocaleString('en-US')} miles/year. Tesla total below includes upfront averaged across the term, ${money(overageCost)}/mo potential mileage charges and ${money(num('leaseMonthlyTaxes'))}/mo entered taxes/fees; other taxes/fees may be missing. Credit and trade-in qualification must be verified.`:`FINANCING DEMO, NOT A LIVE OFFER · APR, purchase price, discounts, trade-in, fees and eligibility require a Tesla quote. Monthly comparison includes an assumed ${money(num('down'))} cash down payment that is NOT amortized into monthly ownership costs.`);
+setText('cashFlowNote',leaseMode?'*Tesla lease is an ANNUALIZED equivalent, not the actual billing schedule. Includes initial cash at signing (first payment assumed included), example excess-mile charges and entered taxes/fees. Current car is actual estimated monthly cash flow. Additional lease taxes/fees and end-of-lease costs may apply.':'*Finance cash flow excludes one-time cash down payment and charger installation; consider these separately. APR and pricing must be verified.');
+setText('newPaymentRowName',leaseMode?'Payment / effective lease cost':'Loan payment');
+setText('financedLabel',leaseMode?'Lease due at signing':'New loan amount');
+setText('financed',money(leaseMode?leaseDue+negEquity:principal));
+setText('snapCurrent',money(oldTotal));setText('snapTesla',money(newTotal));
+setText('snapDelta',(difference>=0?'SAVE ':'+ ')+money(Math.abs(difference))+'/mo');
+setText('dockDelta',(difference>=0?'SAVE ':'+ ')+money(Math.abs(difference))+'/mo');
+$('snapshotRow').classList.toggle('cost-higher',difference<0);$('mobileSavingsDock').classList.toggle('cost-higher',difference<0);setText('oldCardLabel',$('vehicle').value.trim()||'Current vehicle');setText('newCardLabel','New '+$('model').value);
+$('impact').classList.toggle('more',difference<0);
+setText('impactCap',difference>=0?'Estimated monthly savings':'Estimated additional monthly cost');setText('monthlyDiff',money(Math.abs(difference))+'/mo');setText('impactIcon',difference>=0?'↘':'↗');
+setText('impactText',difference>=0?`${money(difference*12)} less per year in estimated out-of-pocket driving expenses.`:`The new Tesla is ${money(-difference*12)} more per year on these assumptions. See the full breakdown.`);
+setText('barOldLabel',($('vehicle').value.trim()||'CURRENT VEHICLE').toUpperCase());setText('barNewLabel',$('model').value.toUpperCase());setText('barOldTotal',money(oldTotal)+'/mo');setText('barNewTotal',money(newTotal)+'/mo');
+let max=Math.max(oldTotal,newTotal,1);function renderBar(id,arr){$(id).innerHTML='';arr.forEach((v,i)=>{let el=document.createElement('span');el.className='seg '+['c-loan','c-fuel','c-ins','c-maint','c-other'][i];el.style.width=(Math.max(0,v)/max*100)+'%';el.title= ['Financing','Energy','Insurance','Maintenance','Other'][i]+': '+money(v,2);$(id).appendChild(el);});}
+renderBar('oldBar',oldComponents);renderBar('newBar',newComponents);
+const rows=[['oldLoan','newLoan',oldPay,newPay],['oldFuel','newFuel',oldEnergy,newEnergy],['oldInsurance','newInsurance',oldInsurance,newInsurance],['oldMaintenance','newMaintenance',oldMaintenance,newMaintenance],['oldMisc','newMisc',oldOther,newOther],['oldAll','newAll',oldTotal,newTotal],['oldYear','newYear',oldTotal*12,newTotal*12]];rows.forEach(([oldID,newID,a,b])=>{setText(oldID,money(a,2));setText(newID,money(b,2));});
+const energyDiff=(oldEnergy-newEnergy)*12;setText('energySavings',money(energyDiff));$('energySavings').classList.toggle('good',energyDiff>0);$('energySavings').classList.toggle('warn',energyDiff<0);
+setText('energyLabel',energyDiff>=0?'Energy savings / year':'Extra energy cost / year');setText('equity',(equity<0?'−':'')+money(Math.abs(equity)));$('equity').classList.toggle('warn',equity<0);setText('shareLabel',num('homeShare')+'%');setText('ctaTitle','Explore a new '+$('model').value+' with the actual offer');$('order').href=cfg[$('model').value].url;
+const warnings=[];
+if(equity<0)warnings.push(leaseMode?`${money(-equity)} estimated negative trade equity must be resolved separately at lease signing; it is only amortized here for COMPARISON and is NOT assumed financeable.`:`${money(-equity)} estimated negative equity is included in the proposed new loan. Approval to finance this amount is not guaranteed.`);
+if(leaseMode&&num('leaseMonthlyTaxes')===0)warnings.push('Lease taxes/fees are NOT included until entered. Official due-at-signing, annual mileage limits, charges and eligibility must be verified.');
+if(leaseMode&&overageMiles>0)warnings.push(`${overageMiles.toLocaleString('en-US')} annual miles exceed the example allowance. Potential overage cost is included at the EDITABLE ${money(num('leaseOverage'),2)}/mile assumption.`);if(!leaseMode&&gross<0)warnings.push('Down payment, positive equity and discounts exceed the estimated vehicle purchase price. New financing is shown as $0; unused cash is not modeled.');if(override!==''&&Math.abs(oldPay-calculated)>20)warnings.push('The entered current payment differs from the payment calculated using payoff balance, APR and remaining term. Your entered actual payment takes priority.');if(num('newapr')>25||num('oldapr')>25)warnings.push('Check the APR entries; one or more appear unusually high.');
+$('loanWarn').classList.toggle('visible',warnings.length>0);$('loanWarn').textContent=warnings.join(' ');
+}
+ids.forEach(id=>$(id).addEventListener('input',()=>{if(id==='miles'){annualMiles=num('miles')*getFactor();showMiles();refreshMaintenance();}if(['vehicle','eff','oldins','oldmaint','oldother'].includes(id))ownershipOrigin='Inputs / estimates';if(id==='oldmaint'&&!suppressMaintenanceChange)$('autoMaint').checked=false;calc();}));
+document.querySelectorAll('[data-unit]').forEach(btn=>btn.addEventListener('click',()=>{unit=btn.dataset.unit;showMiles();calc();}));
+for(const id of ['leasePayment','leaseDue','leaseTerm','leaseMiles','leaseOverage','leaseMonthlyTaxes'])$(id).addEventListener('input',calc);
+$('dealType').addEventListener('change',()=>{$('leaseFields').hidden=$('dealType').value!=='lease';$('financeFields').hidden=$('dealType').value==='lease';calc();});
+$('model').addEventListener('change',()=>{let c=cfg[$('model').value];$('price').value=c.price;$('evEff').value=c.eff;calc();});
+$('type').addEventListener('change',()=>{const ev=$('type').value==='ev';$('oldEffLabel').textContent=ev?'Current usage (kWh/100 mi)':'Current efficiency (MPG)';$('oldEnergyPriceLabel').textContent=ev?'Electricity ($/kWh)':'Gasoline ($/gal)';$('eff').value=ev?'30':'23';$('gasprice').value=ev?'.18':'3.80';calc();});
+$('reset').addEventListener('click',()=>{ids.forEach(id=>$(id).value=initial[id]);$('vin').value='';$('vinstatus').textContent='VIN lookup uses NHTSA; EPA fuel economy may require choosing a trim. No loan or repair history is retrieved.';matchedVehicle=null;epaVehicles.clear();$('epaMatch').classList.remove('visible');$('epaVariant').innerHTML='<option value="">Choose engine / drivetrain</option>';$('autoMaint').checked=false;$('ownerClass').value='compactSUV';$('maintRate').value='.1206';$('deprate').value='10';ownershipOrigin='Illustrative inputs';ownershipBenchmarkInfo();unit='yearly';annualMiles=18000;$('dealType').value='lease';$('leaseFields').hidden=false;$('financeFields').hidden=true;for(const id of ['leasePayment','leaseDue','leaseTerm','leaseMiles','leaseOverage','leaseMonthlyTaxes'])$(id).value={leasePayment:399,leaseDue:3500,leaseTerm:36,leaseMiles:15000,leaseOverage:.25,leaseMonthlyTaxes:0}[id];setText('oldEffLabel','Current efficiency (MPG)');setText('oldEnergyPriceLabel','Gasoline ($/gal)');showMiles();calc();});
+$('print').addEventListener('click',()=>window.print());$('printTop').addEventListener('click',()=>window.print());
+
+// Normalise XML and JSON menu formats from FuelEconomy.gov.
+function parseApi(raw){
+ if(typeof raw==='object')return raw;
+ const xml=new DOMParser().parseFromString(raw,'application/xml');
+ if(xml.querySelector('parsererror'))throw new Error('Unrecognized EPA response');
+ const items=Array.from(xml.getElementsByTagName('menuItem'));
+ if(items.length)return {menuItem:items.map(el=>({text:el.getElementsByTagName('text')[0]?.textContent||'',value:el.getElementsByTagName('value')[0]?.textContent||''}))};
+ const obj={};Array.from(xml.documentElement.children).forEach(el=>{if(!el.children.length)obj[el.tagName]=el.textContent;});return obj;
+}
+async function fromGov(url){
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+ try{
+  const res=await fetch(url,{headers:{Accept:'application/json'},signal:controller.signal});
+  if(!res.ok)throw new Error('Vehicle data service unavailable ('+res.status+')');
+  const raw=await res.text();return parseApi(raw.trim().startsWith('<')?raw:JSON.parse(raw));
+ }finally{clearTimeout(timer)}
+}
+const epaBase='https://www.fueleconomy.gov/ws/rest/vehicle';
+const norm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+function menuItems(data){const raw=data?.menuItem||data?.menuItems?.menuItem||[];return Array.isArray(raw)?raw:raw?[raw]:[];}
+async function lookupEPA(result){
+ $('epaMatch').classList.remove('visible');epaVehicles.clear();
+ const year=result.ModelYear,make=result.Make,model=result.Model;
+ if(!year||!make||!model)throw new Error('Incomplete year/make/model for EPA lookup');
+ const models=menuItems(await fromGov(`${epaBase}/menu/model?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`));
+ const target=norm(model),tokens=String(model).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+ let matches=models.filter(m=>norm(m.value||m.text)===target);
+ if(!matches.length)matches=models.filter(m=>norm(m.value||m.text).includes(target)||target.includes(norm(m.value||m.text)));
+ if(matches.length!==1)throw new Error('EPA exact model match unavailable; enter MPG manually');
+ const chosen=matches[0].value||matches[0].text;
+ const options=menuItems(await fromGov(`${epaBase}/menu/options?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}&model=${encodeURIComponent(chosen)}`));
+ if(!options.length)throw new Error('EPA has no configurations for this vehicle');
+ const selector=$('epaVariant');selector.replaceChildren();
+ const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Select engine / drivetrain';selector.appendChild(placeholder);
+ for(const [index,item] of options.entries()){
+  const key=String(index),id=String(item.value||'');if(!/^\d+$/.test(id))continue;
+  epaVehicles.set(key,{id,label:String(item.text||chosen)});
+  const opt=document.createElement('option');opt.value=key;opt.textContent=String(item.text||chosen);selector.appendChild(opt);
+ }
+ if(!epaVehicles.size)throw new Error('EPA configurations could not be read');
+ $('epaMatch').classList.add('visible');
+ if(epaVehicles.size===1){selector.value='0';await applyEPARecord();return `EPA fuel economy loaded.`;}
+ return `${epaVehicles.size} EPA configurations found. Choose the matching engine and drivetrain below.`;
+}
+async function applyEPARecord(){
+ const selected=epaVehicles.get($('epaVariant').value);if(!selected){$('vinstatus').textContent='Choose an EPA engine and drivetrain first.';return;}
+ const btn=$('applyEPA');btn.disabled=true;btn.textContent='Loading EPA…';
+ try{
+  const car=await fromGov(`${epaBase}/${encodeURIComponent(selected.id)}`);
+  const electric=/^electricity$/i.test(String(car.fuelType1||''))||String(car.atvType||car.atvtype||'').toLowerCase()==='ev';
+  const isPlugin=/plug.in hybrid/i.test(String(car.atvType||car.atvtype||''));
+  if(isPlugin)throw new Error('Plug-in hybrid has separate gasoline/electric modes. Enter your own blended efficiency.');
+  let efficiency=electric?Number(car.combE):Number(car.comb08);
+  if(!Number.isFinite(efficiency)||efficiency<=0)throw new Error('EPA efficiency unavailable for this configuration');
+  const newType=electric?'ev':'gas';
+  $('type').value=newType;setText('oldEffLabel',electric?'Current usage (kWh/100 mi)':'Current efficiency (MPG)');setText('oldEnergyPriceLabel',electric?'Electricity ($/kWh)':'Gasoline ($/gal)');
+  $('eff').value=efficiency;
+  if(electric)$('gasprice').value='.21';
+  assignClass(estimateClass(matchedVehicle?.BodyClass||'',matchedVehicle?.Model||'',car.VClass||''));
+  ownershipOrigin='NHTSA + EPA / estimates';
+  $('vinstatus').textContent=`EPA matched ${car.year||matchedVehicle?.ModelYear} ${car.make||matchedVehicle?.Make} ${car.model||matchedVehicle?.Model}: ${efficiency} ${electric?'kWh/100 mi':'combined MPG'}. Category estimates are NOT model-specific.`;
+  calc();
+ }catch(err){$('vinstatus').textContent='EPA match unavailable: '+err.message+' You can enter fuel efficiency manually.';}
+ finally{btn.disabled=false;btn.textContent='Apply EPA fuel economy';}
+}
+$('applyEPA').addEventListener('click',applyEPARecord);
+$('ownerClass').addEventListener('change',()=>{assignClass($('ownerClass').value);ownershipOrigin=matchedVehicle?'VIN + class estimates':'Inputs / class estimates';calc();});
+$('maintRate').addEventListener('input',()=>{refreshMaintenance();calc();});
+$('deprate').addEventListener('input',calc);
+$('autoMaint').addEventListener('change',()=>{refreshMaintenance();ownershipOrigin=matchedVehicle?'VIN + class estimates':'Inputs / class estimates';calc();});
+$('applyAAABenchmarks').addEventListener('click',()=>{
+ const b=ownerBench();$('oldins').value=(b.insurance/12).toFixed(2);
+ $('autoMaint').checked=true;refreshMaintenance();ownershipOrigin='AAA category reference';calc();
+ setText('ownerClassStatus',`Applied AAA 2026 ${b.label.toLowerCase()} new-car upkeep and insurance benchmarks; customer-specific upkeep and insurance should replace these. Registration remains customer-entered.`);
+});
+$('decodeVIN').addEventListener('click',async()=>{
+ const vin=$('vin').value.trim().toUpperCase();
+ if(!/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)){$('vinstatus').textContent='Enter a valid 17-character VIN (no I, O or Q).';return;}
+ const btn=$('decodeVIN');btn.disabled=true;btn.textContent='Checking…';$('vinstatus').textContent='Checking NHTSA vehicle records…';
+ try{
+  const data=await fromGov('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/'+encodeURIComponent(vin)+'?format=json');
+  const result=data.Results?.[0];if(!result?.Make||!result?.Model||!result?.ModelYear)throw new Error('NHTSA could not identify year, make and model');
+  matchedVehicle=result;
+  $('vehicle').value=[result.ModelYear,result.Make,result.Model,result.Trim].filter(Boolean).join(' ');
+  assignClass(estimateClass(result.BodyClass,result.Model,''));
+  $('autoMaint').checked=true;refreshMaintenance();ownershipOrigin='VIN + class estimates';calc();
+  $('vinstatus').textContent='VIN identified. Looking for EPA fuel economy options…';
+  try{const message=await lookupEPA(result);$('vinstatus').textContent=`${result.ModelYear} ${result.Make} ${result.Model} decoded. ${message}`;}
+  catch(error){$('vinstatus').textContent=`${result.ModelYear} ${result.Make} ${result.Model} identified; ${error.message}. MPG remains manual.`;}
+  calc();
+ }catch(err){$('vinstatus').textContent='VIN lookup unavailable: '+err.message+'. Enter the vehicle manually.';}
+ finally{btn.disabled=false;btn.textContent='Decode VIN';}
+});
+ownershipBenchmarkInfo();
+showMiles();calc();
+})();
+</script>
+
+<script>
+(()=>{
+'use strict';
+const $ = id => document.getElementById(id);
+const escaped = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const usd = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(n);
+const milesToM = n => n*1609.344;
+let currentTab='home', currentCenter=null, currentLabel='', stations=[], selectedKey=null, pending=0;
+const addresses={home:'',work:'',other:''}, rates = new Map();
+let map, centerPin, rangeRing, pinLayer;
+const mapCoords=[39.083997,-77.152758]; // Rockville, Maryland demo focus. No user geolocation is accessed.
+function status(msg,kind='') { const el=$('locatorStatus');el.className='locator-status '+kind;el.textContent=msg;el.style.display='block'; }
+function hideStatus(){ $('locatorStatus').style.display='none'; }
+function chargingNum(){let n=Number($('superRate').value);return Number.isFinite(n)?Math.max(0,n):0;}
+function distMi(a,b){const R=3958.7613,rad=x=>x*Math.PI/180,dLat=rad(b[0]-a[0]),dLon=rad(b[1]-a[1]);return 2*R*Math.asin(Math.sqrt(Math.sin(dLat/2)**2+Math.cos(rad(a[0]))*Math.cos(rad(b[0]))*Math.sin(dLon/2)**2));}
+function annualMiles(){let x=Number($('miles').value)||0,unit=document.querySelector('[data-unit].active')?.dataset.unit||'yearly';return Math.max(0,x)*(unit==='weekly'?52:unit==='monthly'?12:1);}
+function kwhMonthly(){return annualMiles()/12*(Math.max(0,Number($('evEff').value)||0)/100);}
+function refreshSnapshot(){const kwh=kwhMonthly(),base=chargingNum(),s=stations.find(s=>s.key===selectedKey),sel=s?getRate(s):null;
+ $('locatorDistance').textContent=Math.round(annualMiles()/12).toLocaleString()+' miles / month';
+ $('locatorSuperCost').textContent=usd(kwh*base)+'/mo';
+ $('locatorChosenRate').textContent=sel===null?'Not selected':usd(sel)+'/kWh';
+ $('locatorBenchmarkCost').textContent=sel===null?usd(kwh*base)+'/mo':usd(kwh*sel)+'/mo';
+ const diff=sel===null?null:(base-sel)*kwh;
+ $('locatorSavingsNote').textContent=sel===null?'Select a station and enter a confirmed $/kWh rate to compare charging costs.':
+ (diff>=0?usd(diff)+' per month cheaper':usd(-diff)+' per month more expensive')+' than the entered Supercharger rate at '+Math.round(annualMiles()/12).toLocaleString()+' mi/month (before fees and losses).';
+ const a=$('apartmentIndicator');a.textContent=Number($('homeShare').value)===0?'Home charging: 0% ✓':'Set home share to 0% ↗';
+}
+function getRate(s){if(rates.has(s.key))return rates.get(s.key);
+ // Only recognize unambiguous kWh-priced community tags; all values are advisory, not live or independently verified.
+ let raw=s.tags.charge||s.tags['charge:car']||'';
+ if(raw&&!/[;+]/.test(raw)){
+   const normalized=String(raw).trim();
+   const m=normalized.match(/^(?:USD\s*)?\$?\s*(\d+(?:\.\d+)?)\s*(?:USD\s*)?(?:\/\s*kwh|per\s*kwh)$/i);
+   if(m && Number(m[1])<=5)return Number(m[1]);
+ }
+ if(String(s.tags.fee||'').toLowerCase()==='no')return 0;
+ return null;
+}
+function sourceLabel(s){if(rates.has(s.key))return 'Advisor-entered rate';if(getRate(s)!==null)return getRate(s)===0?'OSM tagged free · verify':'OSM price tag · verify';return 'Rate unknown';}
+function priceStatus(s){const rate=getRate(s);return rate===null?'unknown':rate<chargingNum()?'cheaper':'more';}
+function stationCoords(el){return [el.lat??el.center?.lat,el.lon??el.center?.lon];}
+function stationName(tags){return String(tags.name||tags.brand||tags.operator||tags.network||'EV charging location').trim().slice(0,150);}
+function stationAccess(tags){return String(tags.access||tags['motorcar:access']||'not specified');}
+function plugText(tags){const names=[];for(const [key,value] of Object.entries(tags)){
+ if(key.startsWith('socket:')&&!key.includes(':output')&&!key.includes(':current')&&!key.includes(':voltage')&&!key.includes(':type')&&!key.includes(':amperage')&&!key.includes(':count')&&!key.includes(':power')&&!key.includes(':fee')&&String(value)!=='no')names.push(key.slice(7).toUpperCase().replace(/_/g,' '));
+ }return [...new Set(names)].slice(0,4).join(' · ')||'Connector not specified';}
+function chooseStation(key){selectedKey=key;const s=stations.find(x=>x.key===key);if(!s)return;
+ if(map && s.marker){ map.panTo(s.coords,{animate:true}); s.marker.openPopup(); }
+ renderStations();refreshSnapshot();}
+function applyRate(key){const s=stations.find(x=>x.key===key);if(!s)return;
+ const input=document.getElementById('quote-'+key.replace(':','-'));
+ if(!input || input.value.trim()==='' || !Number.isFinite(Number(input.value)) || Number(input.value)<0 || Number(input.value)>5){status('Please enter a quoted kWh rate from $0.00 to $5.00, verified in the charging network app.','error');return;}
+ const rate=Number(input.value); rates.set(key,rate);selectedKey=key;
+ $('publiccost').value=rate; $('publiccost').dispatchEvent(new Event('input',{bubbles:true}));
+ // This rate applies to the PUBLIC-charging share; home share remains adjustable.
+ refreshSnapshot();renderStations();renderMarkers();status('Applied '+usd(rate)+'/kWh to the public charging rate in your Tesla comparison. Confirm additional station/session/parking fees.','success');
+}
+function renderStations(){const list=$('stationList');list.textContent='';const show=stations.filter(s=>!$('cheaperOnly').checked||priceStatus(s)==='cheaper');
+ $('locatorCount').textContent=stations.length ? (show.length+' of '+stations.length+' locations') : (currentCenter?'No matches':'Search an area to begin');
+ if(stations.length&&!show.length){const p=document.createElement('div');p.className='locator-status';p.textContent='No listed or Advisor-entered station rates below this benchmark. Turn off the cheaper-only filter to see locations with unknown prices.';list.append(p);return;}
+ const limit=60;
+ for(const s of show.slice(0,limit)){
+ const rate=getRate(s),state=priceStatus(s),card=document.createElement('article');card.className='station-card'+(selectedKey===s.key?' selected':'');
+ const name=escaped(s.name),detail=escaped(plugText(s.tags)),op=escaped(s.tags.operator||s.tags.network||s.tags.brand||'Network not specified');
+ const dist=s.distance.toFixed(1)+' mi',access=escaped(stationAccess(s.tags));
+ card.innerHTML=`<div class="station-top"><div><div class="station-name">${name}</div><div class="station-meta">${op} · ${dist} straight-line<br/>${detail} · Access: ${access}</div></div><span class="station-badge ${state}">${rate===null?'Price unknown':usd(rate)+'/kWh'}</span></div>
+ <div class="station-bottom"><span class="station-meta">${escaped(sourceLabel(s))}</span><div class="station-actions"><button type="button" data-view="${escaped(s.key)}">Map ↗</button><a href="https://www.google.com/maps/dir/?api=1&amp;destination=${s.coords[0]},${s.coords[1]}&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Directions ↗</a></div></div>
+ <div class="station-price"><label for="quote-${escaped(s.key.replace(':','-'))}">Rate seen in charger app ($/kWh)</label><input id="quote-${escaped(s.key.replace(':','-'))}" aria-label="Verified charging rate at ${name}" type="number" min="0" max="5" step="0.01" placeholder="0.00" value="${rates.has(s.key)?rates.get(s.key):''}"><button data-apply="${escaped(s.key)}" type="button">Apply rate ↗</button></div>`;
+ card.querySelector('[data-view]').addEventListener('click',()=>chooseStation(s.key));
+ card.querySelector('[data-apply]').addEventListener('click',()=>applyRate(s.key));
+ list.append(card);
+ }
+}
+function renderMarkers(){if(!map)return;pinLayer.clearLayers();
+ for(const s of stations){if($('cheaperOnly').checked&&priceStatus(s)!=='cheaper')continue;
+ const state=priceStatus(s),color=state==='cheaper'?'#1a744a':state==='more'?'#e82127':'#717780';
+ const marker=L.circleMarker(s.coords,{radius:selectedKey===s.key?10:7,color:'#fff',weight:2,fillColor:color,fillOpacity:1});
+ marker.bindPopup(`<strong>${escaped(s.name)}</strong><br/>${escaped(plugText(s.tags))}<br/>${getRate(s)===null?'Price unavailable':usd(getRate(s))+'/kWh · unverified'}<br/>${escaped(s.distance.toFixed(1))} miles (straight-line)`);
+ marker.on('click',()=>{selectedKey=s.key;renderStations();refreshSnapshot();});marker.addTo(pinLayer);s.marker=marker;
+ }
+}
+function showResults(items, coords){const max=Number($('searchRadius').value),unique=new Map();
+ for(const el of items){const loc=stationCoords(el);if(!Number.isFinite(loc[0])||!Number.isFinite(loc[1]))continue;
+ const d=distMi(coords,loc);if(d>max+.15)continue;const t=el.tags||{};
+ const access=stationAccess(t).toLowerCase();if(['private','no'].includes(access))continue;
+ const k=el.type+':'+el.id;
+ // A station may be mapped as both a node and an area; avoid duplicate pins at same coordinates/name.
+ const dup=[...unique.values()].some(s=>s.name===stationName(t)&&distMi(s.coords,loc)<.025);if(dup)continue;
+ unique.set(k,{key:k,coords:loc,distance:d,name:stationName(t),tags:t});
+ }
+ stations=[...unique.values()].sort((a,b)=>a.distance-b.distance).slice(0,120);selectedKey=null;rates.clear();
+ if(map){renderMarkers();map.setView(coords,Math.max(10,max===1?14:max===3?13:max===5?12:11));rangeRing?.setRadius(milesToM(max));}
+ renderStations();refreshSnapshot();
+ if(!stations.length)status('No public or unspecified-access charging stations were returned from the community map for this area. Try a larger radius or check ChargePoint/PlugShare.','error');
+ else {status('Found '+stations.length+' community-listed charging locations. Locations may be incomplete; prices and availability must be confirmed in the network app.','success');}
+}
+async function fetchJSON(url,opt={},timeout=16000){const c=new AbortController();const t=setTimeout(()=>c.abort(),timeout);
+ try{const r=await fetch(url,{...opt,signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}
+ finally{clearTimeout(t);}
+}
+async function lookupAddress(address){const url='https://photon.komoot.io/api/?'+new URLSearchParams({q:address,limit:'3',lang:'en'});
+ const data=await fetchJSON(url,{},11000),f=data?.features?.[0];if(!f||!f.geometry||!f.geometry.coordinates)throw new Error('Address not found. Try a street plus city/state or nearby landmark.');
+ const co=f.geometry.coordinates,pr=f.properties||{};
+ return {coords:[co[1],co[0]],label:[pr.name,pr.city||pr.county,pr.state].filter(Boolean).join(', ')||address};
+}
+async function fetchStations(coords,radius){const meters=Math.round(milesToM(radius));
+ const query=`[out:json][timeout:20];(nwr["amenity"="charging_station"](around:${meters},${coords[0].toFixed(6)},${coords[1].toFixed(6)}););out center;`;
+ const endpoints=['https://overpass.kumi.systems/api/interpreter','https://overpass-api.de/api/interpreter'];
+ let error;
+ for(const base of endpoints){try{return (await fetchJSON(base,{method:'POST',body:new URLSearchParams({data:query}),headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}},18000)).elements||[];}catch(e){error=e;}}
+ throw new Error('Charging map directory temporarily unavailable ('+(error?.message||'network error')+'). Try again or open ChargePoint/PlugShare.');
+}
+async function doSearch(e){e.preventDefault();const address=$('locAddress').value.trim();if(address.length<3){status('Enter an address, ZIP code, or nearby landmark to search.','error');return;}
+ addresses[currentTab]=address;const btn=$('locSearch'),req=++pending;btn.disabled=true;btn.textContent='Searching…';status('Locating the requested address…');
+ try{const loc=await lookupAddress(address);if(req!==pending)return;
+ currentCenter=loc.coords;currentLabel=loc.label;
+ $('mapAreaLabel').textContent=currentTab.toUpperCase()+' · '+currentLabel;
+ if(map){map.setView(loc.coords,13);centerPin.setLatLng(loc.coords).bindTooltip('Search location').openTooltip();rangeRing.setLatLng(loc.coords);rangeRing.setRadius(milesToM(Number($('searchRadius').value)));}
+ status('Finding nearby public charging locations…');const result=await fetchStations(loc.coords,Number($('searchRadius').value));if(req!==pending)return;
+ showResults(result,loc.coords);
+ }catch(error){if(req===pending)status('Search failed: '+error.message+' You can also use the ChargePoint or PlugShare links below.','error');}
+ finally{if(req===pending){btn.disabled=false;btn.textContent='Find chargers ↗';}}
+}
+function initMap(){if(!window.L){$('chargerMapFallback').style.display='grid';status('Mapping library did not load. Check your internet connection, then reopen the app.','error');return;}
+ map=L.map('chargerMap',{zoomControl:true,scrollWheelZoom:false}).setView(mapCoords,12);
+ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(map);
+ pinLayer=L.layerGroup().addTo(map);
+ centerPin=L.circleMarker(mapCoords,{radius:9,color:'#fff',weight:3,fillColor:'#171a20',fillOpacity:1}).addTo(map);
+ centerPin.bindTooltip('Rockville demo center');
+ rangeRing=L.circle(mapCoords,{radius:0,color:'#171a20',weight:1,fillColor:'#171a20',fillOpacity:.06,interactive:false}).addTo(map);
+ setTimeout(()=>map.invalidateSize(),150);
+}
+for(const btn of document.querySelectorAll('[data-location]'))btn.addEventListener('click',()=>{
+ addresses[currentTab]=$('locAddress').value;currentTab=btn.dataset.location;$('locAddress').value=addresses[currentTab]||'';
+ document.querySelectorAll('[data-location]').forEach(b=>{const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+ $('locAddress').placeholder=currentTab==='home'?'e.g. Rockville, MD':currentTab==='work'?'e.g. Office address or ZIP':'e.g. Gym, school or shopping center';
+});
+$('chargerSearchForm').addEventListener('submit',doSearch);
+$('apartmentMode').addEventListener('click',()=>{$('homeShare').value='0';$('homeShare').dispatchEvent(new Event('input',{bubbles:true}));refreshSnapshot();status('Apartment scenario enabled: all charging is modeled as public charging. Select a station rate to update your cost comparison.','success');});
+$('cheaperOnly').addEventListener('change',()=>{renderMarkers();renderStations();});
+$('superRate').addEventListener('input',()=>{refreshSnapshot();renderStations();renderMarkers();});
+$('searchRadius').addEventListener('change',()=>{if(currentCenter){rangeRing?.setRadius(milesToM(Number($('searchRadius').value)));status('Radius changed. Press Find chargers again to refresh the search.');}});
+for(const ev of ['input','change']){for(const id of ['miles','evEff','homeShare','publiccost'])$(id).addEventListener(ev,refreshSnapshot);}
+document.querySelectorAll('[data-unit]').forEach(b=>b.addEventListener('click',refreshSnapshot));
+$('reset').addEventListener('click',()=>{selectedKey=null;rates.clear();refreshSnapshot();renderMarkers();renderStations();});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initMap);else initMap();
+refreshSnapshot();
+})();
+</script>
+
+
+<script>
+// Journey interactions: native horizontal touch scroll, keyboard and accessible tabs.
+(()=>{
+'use strict';
+const track=document.getElementById('journeyTrack');
+const tabs=[...document.querySelectorAll('.journey-tab')];
+const progress=document.getElementById('progressFill');
+let page=0,scrollTimer=0;
+const slides=[...document.querySelectorAll('.journey-slide')];
+const btnPrev=document.getElementById('journeyPrev'), btnNext=document.getElementById('journeyNext');
+function sizeTrack(){track.style.height=Math.ceil(slides[page].getBoundingClientRect().height)+'px';}
+function setPage(n,move=true){
+ page=Math.max(0,Math.min(2,n));
+ for(let i=0;i<3;i++){tabs[i].classList.toggle('active',i===page);if(i===page)tabs[i].setAttribute('aria-current','step');else tabs[i].removeAttribute('aria-current');}
+ document.getElementById('screenCount').textContent='0'+(page+1)+' / 03';
+ document.getElementById('journeyDots').textContent=[0,1,2].map(i=>i===page?'●':'○').join(' ');
+ progress.style.width=((page+1)*100/3)+'%';btnPrev.disabled=page===0;btnNext.disabled=page===2;
+ if(move)track.scrollTo({left:page*track.clientWidth,behavior:'instant'});
+ sizeTrack();
+}
+function goto(n){setPage(n,true);}
+for(const b of document.querySelectorAll('[data-go]'))b.addEventListener('click',()=>goto(Number(b.dataset.go)));
+btnPrev.addEventListener('click',()=>goto(page-1));btnNext.addEventListener('click',()=>goto(page+1));
+track.addEventListener('scroll',()=>{clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>setPage(Math.round(track.scrollLeft/Math.max(1,track.clientWidth)),false),70);},{passive:true});
+track.addEventListener('keydown',e=>{if(e.target!==track)return;if(e.key==='ArrowRight'){e.preventDefault();goto(page+1)}if(e.key==='ArrowLeft'){e.preventDefault();goto(page-1)}});
+window.addEventListener('resize',()=>{track.scrollLeft=page*track.clientWidth;sizeTrack()});
+const ro=new ResizeObserver(()=>sizeTrack());for(const slide of slides)ro.observe(slide);
+function showBreakdown(){document.querySelector('.output-panel').scrollIntoView({behavior:'smooth',block:'start'});}
+for(const b of document.querySelectorAll('[data-see-results]'))b.addEventListener('click',showBreakdown);
+document.getElementById('jumpBreakdown').addEventListener('click',showBreakdown);
+const dealType=document.getElementById('dealType'),leaseFields=document.getElementById('leaseFields'),financeFields=document.getElementById('financeFields');
+function setMode(){leaseFields.hidden=dealType.value!=='lease';financeFields.hidden=dealType.value==='lease'}
+dealType.addEventListener('change',()=>{setMode();requestAnimationFrame(sizeTrack)});setMode();
+document.getElementById('ownershipDetails').addEventListener('toggle',()=>requestAnimationFrame(sizeTrack));
+setPage(0,false);requestAnimationFrame(sizeTrack);
+})();
+</script>
+</body>
+</html>
