@@ -78,7 +78,7 @@
 #chargerMap{height:100%;min-height:540px;width:100%;z-index:0}
 .locator-map-help{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;z-index:490}
 .locator-map-label{background:#fffffff0;box-shadow:0 4px 20px #0001;border-radius:4px;padding:10px 12px;font-size:10px;letter-spacing:.5px;color:#4a5158;max-width:235px;line-height:1.6}
-.locator-map-legend{position:absolute;bottom:28px;right:16px;background:#fffefeec;padding:10px 12px;font-size:10px;color:#61666d;display:grid;gap:6px;box-shadow:0 4px 20px #0001;z-index:490;pointer-events:none;border-radius:4px}
+.locator-map-legend{position:absolute;bottom:28px;right:16px;background:#fffefef2;padding:10px 12px;font-size:10px;color:#61666d;display:grid;gap:6px;box-shadow:0 4px 20px #0001;z-index:490;pointer-events:auto;border-radius:4px;max-height:220px;overflow-y:auto;max-width:175px}
 .locator-map-legend i{display:inline-block;width:10px;height:10px;margin-right:7px;border-radius:50%;vertical-align:-1px}.locator-map-legend strong{color:#23272d;font-size:10px}.network-filter-note{font-size:10px;color:#737982;line-height:1.5;margin:-3px 0 11px}.station-network{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;line-height:1.5}.station-network i{display:inline-block;width:10px;height:10px;border-radius:50%}.station-price-note{font-size:10px;color:#69727b;line-height:1.5;margin-top:8px}.station-price-note a{color:#36485e;text-decoration:underline}
 .locator-map-fallback{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:25px;color:#626b73;background:linear-gradient(140deg,#f3f5f6,#e0e5e8);z-index:1}
 .locator-footer{border-top:1px solid #e8ebed;padding:13px 26px;background:#fbfbfb;font-size:10px;line-height:1.7;color:#85898f}
@@ -642,7 +642,7 @@ function plugText(tags){const names=[];for(const [key,value] of Object.entries(t
  if(key.startsWith('socket:')&&!key.includes(':output')&&!key.includes(':current')&&!key.includes(':voltage')&&!key.includes(':type')&&!key.includes(':amperage')&&!key.includes(':count')&&!key.includes(':power')&&!key.includes(':fee')&&String(value)!=='no')names.push(key.slice(7).toUpperCase().replace(/_/g,' '));
  }return [...new Set(names)].slice(0,4).join(' · ')||'Connector not specified';}
 function chooseStation(key){selectedKey=key;const s=stations.find(x=>x.key===key);if(!s)return;
- if(map && s.marker){ map.panTo(s.coords,{animate:true}); s.marker.openPopup(); }
+ if(map){renderMarkers();map.panTo(s.coords,{animate:true});s.marker?.openPopup();}
  renderStations();refreshSnapshot();}
 function applyRate(key){const s=stations.find(x=>x.key===key);if(!s)return;
  const input=document.getElementById('quote-'+key.replace(':','-'));
@@ -706,7 +706,7 @@ function renderMarkers(){
   const marker=L.circleMarker(s.coords,{radius:selectedKey===s.key?11:8,color:selectedKey===s.key?'#171a20':'#ffffff',weight:selectedKey===s.key?4:2.5,fillColor:n.color,fillOpacity:1});
   const label=p.rate===null?'Per-kWh rate unavailable':(p.rate===0?'Reported free':usd(p.rate)+'/kWh · reported');
   marker.bindPopup('<strong>'+escaped(s.name)+'</strong><br/>'+escaped(n.name)+'<br/>'+escaped(plugText(s.tags))+'<br/><b>'+escaped(label)+'</b><br/>'+escaped(sourceLabel(s))+'<br/>'+escaped((p.raw||'').slice(0,160))+'<br/>'+escaped(s.distance.toFixed(1))+' miles straight-line · confirm in app');
-  marker.on('click',()=>{selectedKey=s.key;renderStations();refreshSnapshot();renderMarkers();});
+  marker.on('click',()=>{selectedKey=s.key;renderStations();refreshSnapshot();renderMarkers();s.marker?.openPopup();});
   marker.addTo(pinLayer);s.marker=marker;
  }
 }
