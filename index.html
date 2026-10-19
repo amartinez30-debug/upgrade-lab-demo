@@ -1184,5 +1184,120 @@ render();
 })();
 </script>
 
+
+<script>
+// Tire-free illustrative service, unscheduled repair reserve, 8-year conditional scenario.
+// VIN decodes identity only; NO claim of VIN-specific service invoice access.
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const currency=value=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(value);
+const mileage=()=>{
+ const unit=document.querySelector('[data-unit].active')?.dataset.unit||'yearly';
+ const v=Number($('miles').value)||0;
+ return Math.max(0,v*(unit==='weekly'?52:unit==='monthly'?12:1));
+};
+const val=id=>Math.max(0,Number($(id)?.value)||0);
+let vinIdentity=null,applied=false;
+function currentPowertrain(){
+ if(vinIdentity&&String(vinIdentity.fuel||'').toLowerCase().includes('electric')&&!String(vinIdentity.fuel||'').toLowerCase().includes('gasoline'))return 'ev';
+ return $('type').value;
+}
+function warrantyModel(){return $('model').value||$('quickModel')?.value||'Model Y'}
+function setWarrantyTier(){
+ const model=warrantyModel(),select=$('maintBatteryTier'),prev=select.value;
+ const longRange=['Model S','Model X','Cybertruck'].includes(model);
+ const choices=longRange?[['150000','8 yrs / 150,000 mi · S/X/Cybertruck']]:
+  [['100000','8 yrs / 100,000 mi · applicable base RWD/AWD'],['120000','8 yrs / 120,000 mi · eligible Premium/Performance']];
+ select.replaceChildren();
+ for(const [miles,label] of choices){const o=document.createElement('option');o.value=miles;o.textContent=label;select.append(o)}
+ // When changing model families, default to conservative mileage tier.
+ select.value=choices.some(([n])=>n===prev)?prev:choices[0][0];
+}
+function calculate(){
+ const miles=mileage(),gas=currentPowertrain()==='gas';
+ const interval=Math.max(1000,val('maintOilInterval')),oilPrice=val('maintOilCost');
+ const services=gas?(miles>0?Math.max(1,miles/interval):0)*oilPrice:0;
+ const scheduled=services+val('maintCurrentOther');
+ const reserve=val('maintRepairReserve');
+ const gasYr=scheduled+reserve,teslaYr=val('maintTeslaRoutine');
+ const engine=val('maintEngineEvent');
+ const eightGas=gasYr*8+engine,eightTesla=teslaYr*8,delta=eightGas-eightTesla;
+ $('maintCurrentYear').textContent=currency(gasYr);
+ $('maintCurrentMonth').textContent=currency(gasYr/12);
+ $('maintTeslaYear').textContent=currency(teslaYr);
+ $('maintTeslaMonth').textContent=currency(teslaYr/12);
+ $('maintEightCurrent').textContent=currency(eightGas);
+ $('maintEightTesla').textContent=currency(eightTesla);
+ $('maintEightSavings').textContent=currency(Math.abs(delta));
+ $('maintEightSavingsLabel').textContent=delta>=0?'Illustrative eight-year service difference in Tesla’s favor'+(engine>0?' · includes optional engine/transmission scenario':' · no major failure assumed'):'Illustrative eight-year service difference in current car’s favor';
+ const mileageTier=val('maintBatteryTier');
+ $('maintBatteryWarranty').textContent='8 years / '+mileageTier.toLocaleString('en-US')+' miles';
+ const basicY=miles>0?Math.min(4,50000/miles):4;
+ const batteryY=miles>0?Math.min(8,mileageTier/miles):8;
+ const suffix=years=>years<4&&years!==8?'about '+years.toFixed(1)+' years at '+Math.round(miles).toLocaleString()+' mi/year':'time limit';
+ $('maintBasicMiles').textContent='Whichever first · mileage may end basic coverage after '+suffix(basicY)+'. Covered defects only.';
+ $('maintBatteryYears').textContent='Whichever first · estimated '+(batteryY<8?batteryY.toFixed(1)+' years at current mileage':'8-year term at current mileage')+'. Min. 70% battery capacity retention; terms apply.';
+ const baseline=gasYr-teslaYr;
+ if($('quickWarrantyLine')){
+  const shortName=warrantyModel();
+  $('quickWarrantyLine').textContent='New '+shortName+' basic coverage: 4 years / 50,000 mi. Battery + drive: 8 years / '+(mileageTier/1000)+'k mi ('+('Model S Model X Cybertruck'.includes(shortName)?'model-specific':'selected trim')+'). Covered defects, not a no-breakdown guarantee.';
+ }
+ const status=$('maintSource');
+ if(vinIdentity){
+  const label=[vinIdentity.year,vinIdentity.make,vinIdentity.model,vinIdentity.trim].filter(Boolean).join(' ');
+  $('maintVehicleLabel').textContent='VIN identified: '+label;
+  status.textContent='NHTSA identified '+label+'. No government VIN decoder reports this individual car’s service invoices, current mileage, condition or exact future repair cost. The displayed tire-free estimate is an editable example schedule; verify make/model service intervals, shop labor rates and warranty history.';
+ }else{
+  $('maintVehicleLabel').textContent='Current vehicle: VIN not decoded';
+  status.textContent='No VIN has been decoded. Enter a VIN above for the correct vehicle identity. These amounts are illustrative service and repair assumptions, not live repair predictions or a make/model-specific price quote.';
+ }
+ return {gasYr,teslaYr,delta,scheduled,reserve};
+}
+function apply(){
+ const {gasYr,teslaYr}=calculate();
+ $('oldmaint').value=(gasYr/12).toFixed(2);
+ $('newmaint').value=(teslaYr/12).toFixed(2);
+ $('oldmaint').dispatchEvent(new Event('input',{bubbles:true}));
+ $('newmaint').dispatchEvent(new Event('input',{bubbles:true}));
+ applied=true;
+ $('maintApplyStatus').textContent='Applied tire-free current vehicle and Tesla costs to the full ownership comparison. Refresh the estimate if you change the assumptions.';
+}
+window.upgradeLabEstimateMaintenance=()=>{
+ calculate();
+ if($('autoMaint').checked)apply();
+};
+for(const id of ['maintOilInterval','maintOilCost','maintCurrentOther','maintRepairReserve','maintTeslaRoutine','maintBatteryTier','maintEngineEvent']){
+ for(const name of ['input','change'])$(id).addEventListener(name,()=>{calculate();if($('autoMaint').checked&&id!=='maintEngineEvent')apply()});
+}
+$('maintApply').addEventListener('click',()=>{$('autoMaint').checked=true;apply()});
+document.addEventListener('upgradeLabVINDecoded',e=>{
+ vinIdentity=e.detail||null;
+ const primary=String(vinIdentity?.fuel||'').toLowerCase();
+ if(primary.includes('electric')&&!primary.includes('gasoline')){
+  $('type').value='ev';$('type').dispatchEvent(new Event('change',{bubbles:true}));
+ }
+ calculate();
+ if($('autoMaint').checked)apply();
+});
+$('model').addEventListener('change',()=>{setWarrantyTier();calculate()});
+$('quickModel')?.addEventListener('change',()=>{
+ // Quick Quote does not automatically change the detailed Tesla model until the user opens Advanced.
+ setTimeout(()=>calculate(),0);
+});
+$('maintBatteryTier').addEventListener('change',calculate);
+for(const id of ['miles','type'])$(id).addEventListener('input',()=>{calculate();if($('autoMaint').checked)apply()});
+document.querySelectorAll('[data-unit]').forEach(btn=>btn.addEventListener('click',()=>{
+ requestAnimationFrame(()=>{calculate();if($('autoMaint').checked)apply()});
+}));
+$('reset').addEventListener('click',()=>{
+ vinIdentity=null;applied=false;
+ for(const [id,value] of Object.entries({maintOilInterval:'7500',maintOilCost:'90',maintCurrentOther:'85',maintRepairReserve:'0',maintTeslaRoutine:'120',maintEngineEvent:'0'}))$(id).value=value;
+ $('autoMaint').checked=false;setWarrantyTier();calculate();
+ $('maintApplyStatus').textContent='Example service values reset. Apply them only after confirming your assumptions.';
+});
+setWarrantyTier();calculate();
+})();
+</script>
 </body>
 </html>
