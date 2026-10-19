@@ -139,6 +139,64 @@
 
 .journey-track{align-items:flex-start;transition:height .24s ease}.journey-slide{height:auto;align-self:flex-start}
 .ownership-disclosure{max-width:860px;border:1px solid #e1e5e9;border-radius:6px;background:#fafbfc;margin-top:17px;overflow:hidden}.ownership-disclosure summary{display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;list-style:none;padding:16px 17px}.ownership-disclosure summary::-webkit-details-marker{display:none}.ownership-disclosure summary strong{display:block;font-size:12px;color:#242a30;margin-bottom:5px}.ownership-disclosure summary small{font-size:10px;color:#797f86}.ownership-disclosure[open] .summary-chevron{transform:rotate(45deg)}.ownership-disclosure .summary-chevron{font-size:20px;color:#717982;transition:transform .15s}.ownership-disclosure .ownership-input{margin:0 12px 12px}
+
+
+/* Upgrade Lab Quick Quote — default advisor view */
+.hero{min-height:205px}
+.hero h1{font-size:clamp(30px,3.2vw,47px);margin:12px 0}
+.hero p{max-width:650px}
+.quick-section{margin:22px 0 10px}
+.quick-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 16px}
+.quick-eyebrow{font-size:10px;letter-spacing:2px;color:#868b92;font-weight:800;text-transform:uppercase}
+.quick-heading h2{font-size:clamp(28px,3vw,40px);font-weight:600;letter-spacing:-1.6px;margin:6px 0}
+.quick-heading p{font-size:13px;color:#646b72;margin:0}
+.quick-flag{font-size:9px;color:#656a71;border:1px solid #dadde0;letter-spacing:1px;border-radius:4px;padding:9px 11px;white-space:nowrap}
+.quick-grid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:17px;align-items:stretch}
+.quick-form-card,.quick-result-card{background:white;border:1px solid #e2e4e7;border-radius:9px;padding:25px 28px;min-width:0}
+.quick-form-card{display:flex;flex-direction:column}
+.quick-card-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.quick-card-top strong{font-size:12px}
+.quick-card-top small{font-size:11px;color:#81858b}
+.quick-vehicle-tabs,.quick-charge-tabs{display:flex;background:#f4f5f6;padding:4px;gap:4px;border-radius:6px;margin-bottom:14px}
+.quick-vehicle-tabs button,.quick-charge-tabs button{background:transparent;flex:1;border:0;border-radius:5px;color:#656b72;padding:11px 7px;font-size:11px;font-weight:700;min-width:0}
+.quick-vehicle-tabs button.active,.quick-charge-tabs button.active{background:#171a20;color:white}
+.quick-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.quick-choices{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.quick-field{display:block;min-width:0}
+.quick-field span{display:block;font-size:11px;font-weight:700;line-height:1.5;margin-bottom:7px}
+.quick-field em{font-size:10px;font-style:normal;font-weight:400;color:#777c83}
+.quick-field input,.quick-field select{display:block;width:100%;min-width:0;height:45px;background:#fbfbfc;border:1px solid #dfe2e5;border-radius:5px;padding:0 11px;color:#171a20;font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.quick-field select{font-size:14px}
+.quick-field input:focus,.quick-field select:focus{outline:2px solid #a8b4c4;outline-offset:1px}
+.quick-divider{height:1px;background:#eceef0;margin:22px 0}
+.quick-charge-title{margin:19px 0 10px}
+.quick-assumption{font-size:10px;color:#777d84;line-height:1.55;margin:3px 0 16px}
+.quick-form-actions{margin-top:auto}
+.quick-detail-button{background:none;border:0;color:#26323d;text-align:left;text-decoration:underline;font-size:12px;font-weight:700;padding:12px 0}
+.quick-detail-button span{margin-left:6px}
+.quick-result-card{background:#171a20;color:#fff;padding:28px 30px;display:flex;flex-direction:column}
+.quick-result-eyebrow{font-size:10px;letter-spacing:2px;color:#b8bdc4;font-weight:800}
+.quick-result-title{font-size:13px;color:#e2e4e8;margin:29px 0 5px}
+.quick-big-number{font-size:clamp(46px,5vw,77px);line-height:1.08;font-weight:550;letter-spacing:-3px;font-variant-numeric:tabular-nums}
+.quick-diff-caption{font-size:12px;color:#c9d0d6;margin:10px 0 22px;line-height:1.55}
+.quick-mini-rows{padding-top:18px;border-top:1px solid #42474f;display:grid;gap:15px}
+.quick-mini-rows div{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.quick-mini-rows span{font-size:11px;color:#c4c8ce}
+.quick-mini-rows strong{font-size:17px;font-variant-numeric:tabular-nums}
+.quick-note{font-size:11px;color:#e1e3e6;background:#292e34;padding:12px;margin:22px 0 13px;line-height:1.5;border-radius:5px}
+.quick-disclosure{font-size:10px;color:#afb5be;line-height:1.65}
+.quick-action-group{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:24px}
+.quick-primary,.quick-secondary{border:0;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:43px;padding:12px 13px;font-weight:750;font-size:11px;text-decoration:none}
+.quick-primary{background:white;color:#171a20;flex:1}
+.quick-secondary{background:#2c3139;color:white;border:1px solid #4b5158;flex:1}
+.advanced-panel[hidden]{display:none!important}
+.advanced-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#fff;border:1px solid #e6e7e9;border-radius:7px;padding:19px 22px;margin:23px 0}
+.advanced-toolbar strong{font-size:19px}
+.advanced-toolbar p{color:#797d84;font-size:11px;margin:5px 0 0}
+@media(max-width:920px){.quick-grid{grid-template-columns:1fr}.quick-action-group{margin-top:12px}.quick-form-card,.quick-result-card{padding:24px}}
+@media(max-width:530px){.hero{min-height:170px}.hero h1{font-size:29px;letter-spacing:-1.2px}.hero p{font-size:12px}.quick-section{margin-top:17px}.quick-heading{display:block}.quick-heading h2{font-size:30px}.quick-flag{display:inline-block;margin-top:10px}.quick-form-card,.quick-result-card{padding:19px 17px}.quick-card-top{display:block}.quick-card-top small{display:block;margin-top:4px}.quick-fields{gap:6px}.quick-field input,.quick-field select{font-size:16px;padding:0 7px}.quick-field span{font-size:10px}.quick-field em{display:block}.quick-big-number{font-size:56px}.quick-mini-rows span{max-width:65%}.advanced-toolbar{display:block}.quick-charge-tabs button,.quick-vehicle-tabs button{padding:12px 5px}}
+@media print{.quick-section{display:none}.advanced-panel[hidden]{display:block!important}}
+
 </style>
 </head>
 <body>
@@ -147,6 +205,59 @@
 <section class="hero"><div class="hero-text"><div class="tiny-line"></div><span class="eyebrow">Rethink your monthly drive</span><h1>What if your next car<br>costs less to drive?</h1><p>Make the real cost of driving visible. Compare your current vehicle with a new Tesla, including financing, energy and everyday ownership expenses.</p></div>
 
 </section>
+
+<section class="quick-section" id="quickQuote" aria-labelledby="quickTitle">
+  <div class="quick-heading">
+    <div><div class="quick-eyebrow">THE 30-SECOND COMPARISON</div><h2 id="quickTitle">Quick Quote.</h2><p>Three details to start. Refine the rest only if the customer wants to.</p></div>
+    <span class="quick-flag">INDEPENDENT DEMO · SAMPLE OFFERS</span>
+  </div>
+  <div class="quick-grid">
+    <div class="quick-form-card">
+      <div class="quick-card-top"><strong>01 / What do they drive today?</strong><small>Replace sample figures with customer estimates.</small></div>
+      <div class="quick-vehicle-tabs" role="group" aria-label="Current vehicle type">
+        <button type="button" data-quick-type="gas" aria-pressed="true" class="active">Gas vehicle</button>
+        <button type="button" data-quick-type="ev" aria-pressed="false">Existing Tesla / EV</button>
+      </div>
+      <div class="quick-fields">
+        <label class="quick-field"><span>Current car payment <em>$/month</em></span><input id="quickPayment" type="number" min="0" step="10" value="550" inputmode="decimal" aria-label="Current monthly car payment"></label>
+        <label class="quick-field"><span>Miles driven <em>per month</em></span><input id="quickMiles" type="number" min="0" step="50" value="1200" inputmode="numeric" aria-label="Estimated miles driven monthly"></label>
+        <label class="quick-field"><span id="quickEffLabel">Current fuel efficiency <em>MPG</em></span><input id="quickEfficiency" type="number" min="1" max="300" step="1" value="25" inputmode="decimal" aria-label="Current vehicle fuel economy"></label>
+      </div>
+      <div class="quick-divider"></div>
+      <div class="quick-card-top"><strong>02 / Their next Tesla</strong><small>Pick a vehicle and a way to pay.</small></div>
+      <div class="quick-choices">
+        <label class="quick-field"><span>Model</span><select id="quickModel"><option value="Model Y">Model Y</option><option value="Model 3">Model 3</option></select></label>
+        <label class="quick-field"><span>Payment type</span><select id="quickDeal"><option value="lease">Lease</option><option value="finance">Finance</option></select></label>
+      </div>
+      <div class="quick-card-top quick-charge-title"><strong>Where will they charge?</strong><small>No home charger? Still compare.</small></div>
+      <div class="quick-charge-tabs" role="group" aria-label="Charging access">
+        <button type="button" class="active" aria-pressed="true" data-quick-charge="mixed">Home + public</button>
+        <button type="button" aria-pressed="false" data-quick-charge="public">Public only</button>
+      </div>
+      <div class="quick-assumption" id="quickInputNote">Example inputs · $3.80/gal gas · home $0.21/kWh, public $0.43/kWh. Editable in Advanced Analysis.</div>
+      <div class="quick-form-actions"><button type="button" id="quickAdvancedBtn" class="quick-detail-button">Refine quote: VIN, trade, APR and more <span aria-hidden="true">↗</span></button></div>
+    </div>
+    <div class="quick-result-card" aria-live="polite">
+      <span class="quick-result-eyebrow">EXPLORATORY COMPARISON</span>
+      <div class="quick-result-title" id="quickResultTitle">Estimated monthly difference</div>
+      <div class="quick-big-number" id="quickDifference">$—</div>
+      <p class="quick-diff-caption" id="quickDifferenceCaption">Update the sample inputs to see the comparison.</p>
+      <div class="quick-mini-rows">
+        <div><span>Current · payment + energy</span><strong id="quickCurrentTotal">—</strong></div>
+        <div><span>New Tesla · payment + charging</span><strong id="quickTeslaTotal">—</strong></div>
+        <div><span>Difference over 12 months</span><strong id="quickAnnualDifference">—</strong></div>
+      </div>
+      <div class="quick-note" id="quickOfferNote">Illustrative lease. Upfront amount and mileage are included in the normalized comparison.</div>
+      <div class="quick-disclosure">Illustrative estimates, <b>not current promotions or Tesla quotes</b>. Comparison includes payment and energy only; it excludes both vehicles' insurance, maintenance, registration and other recurring expenses, and unentered taxes/fees. Trade-in equity, outstanding balance, eligibility and charging losses are not modeled here. An advertised lease payment is not equivalent to the full monthly cost.</div>
+      <div class="quick-action-group">
+        <button type="button" id="quickSeeBreakdown" class="quick-primary">Personalize full comparison ↓</button>
+        <a id="quickOfficial" href="https://www.tesla.com/modely/design" rel="noopener noreferrer" target="_blank" class="quick-secondary">View official Tesla offer ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="advancedPanel" class="advanced-panel" hidden aria-label="Advanced ownership analysis">
+  <div class="advanced-toolbar"><div><div class="quick-eyebrow">DETAILED VIEW</div><strong>Advanced Analysis</strong><p>Optional full financial picture, VIN matching and charging locations.</p></div><button type="button" id="quickCloseAdvanced" class="quick-detail-button">Close details ↑</button></div>
 <div class="section-head"><h2>The upgrade story, three easy swipes</h2><small>New results after every edit · Scroll down for the full picture.</small></div>
 <main class="workspace">
 <section class="input-panel" id="journey" aria-labelledby="journeyTitle">
@@ -304,6 +415,7 @@
 </section>
 
 <section class="action-strip"><div><b id="ctaTitle">Ready to compare the real offer?</b><p>Carry the scenario into Tesla's official configurator to verify live prices, available offers and trade-in terms.</p></div><div class="ctas"><button id="print" class="btn btn-ghost">Print / Save PDF</button><a id="order" href="https://www.tesla.com/modely/design" target="_blank" rel="noopener noreferrer" class="btn btn-red">Explore Tesla Configurator ↗</a></div></section>
+</section>
 <div class="bottom-note">*Annual costs assume the displayed monthly payments continue for 12 months. Cash-flow comparison and one-year economic ownership forecast are different measures and must not be added together. Economic ownership cost includes estimated depreciation and next-year interest but excludes loan principal; it is not a vehicle-specific historical average or lifetime forecast. Existing and new loans may mature at different dates. Charging calculations exclude charging losses, which can vary. Recurring registration, property tax, parking, tolls and miscellaneous ownership charges are intentionally excluded from both vehicles. Costs also exclude changes to fuel prices, unusual repairs, financing contingencies, sales taxes not captured in the upfront tax/fee field and possible loan constraints. Trade-in value, vehicle pricing, incentives and APR must be independently verified. The actual payment can differ due to payoff timing, origination fees, state taxes and financing requirements. This independent demonstration is not affiliated with, approved by or an official quote from Tesla.</div>
 <footer class="foot"><span>UPGRADE LAB — INDEPENDENT RETAIL CONCEPT</span><span>Built for clear, informed upgrade conversations.</span></footer>
 </div>
