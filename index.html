@@ -983,5 +983,135 @@ document.getElementById('ownershipDetails').addEventListener('toggle',()=>reques
 setPage(0,false);requestAnimationFrame(sizeTrack);
 })();
 </script>
+<script>
+// Quick Quote stays intentionally separate from the full ownership calculator.
+// It compares only payment + energy, with all sample assumptions disclosed.
+(()=>{
+'use strict';
+const byId=id=>document.getElementById(id);
+const usd=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+const read=id=>Math.max(0,Number(byId(id)?.value)||0);
+let kind='gas',charge='mixed',openedOnce=false;
+const modelData={
+ 'Model Y':{price:44990,kwh100:28,url:'https://www.tesla.com/modely/design'},
+ 'Model 3':{price:39990,kwh100:25.4,url:'https://www.tesla.com/model3/design'}
+};
+function render(){
+ const distance=read('quickMiles'),paymentText=byId('quickPayment').value.trim(),
+ efficiency=read('quickEfficiency'),model=byId('quickModel').value,
+ deal=byId('quickDeal').value,data=modelData[model];
+ const currentEnergyRate=kind==='gas'
+   ? (byId('type').value==='gas'?read('gasprice'):3.8)
+   : (byId('type').value==='ev'?read('gasprice'):0.18);
+ const homeRate=read('homecost'),publicRate=read('publiccost');
+ const homePercent=charge==='public'?0:70;
+ const newEnergyPerMonth=distance*data.kwh100/100*(homePercent/100*homeRate+(1-homePercent/100)*publicRate);
+ const currentEnergyPerMonth=kind==='gas'
+   ?distance/Math.max(0.1,efficiency)*currentEnergyRate
+   :distance*efficiency/100*currentEnergyRate;
+ let offerPayment=0,offerNote='';
+ if(deal==='lease'){
+   const months=Math.max(1,read('leaseTerm')),listed=read('leasePayment'),upfront=read('leaseDue'),
+     allowed=read('leaseMiles'),excess=Math.max(0,distance*12-allowed)*read('leaseOverage')/12;
+   offerPayment=(listed*(months-1)+upfront)/months+excess+read('leaseMonthlyTaxes');
+   offerNote='Illustrative '+usd(listed)+'/mo advertised lease · '+usd(upfront)+' due at signing · '+months+' months · '+allowed.toLocaleString()+' mi/year. Normalized payment '+usd(offerPayment)+'/mo includes upfront and estimated excess mileage. Other taxes/fees may be missing. Changing models does not change the sample lease offer.';
+ } else {
+   const price=data.price,apr=read('newapr'),months=Math.max(1,read('newterm')),monthlyRate=apr/1200;
+   offerPayment=monthlyRate===0?price/months:price*monthlyRate/(1-Math.pow(1+monthlyRate,-months));
+   offerNote='Sample '+model+' price '+usd(price)+' · '+apr.toFixed(2)+'% APR for '+months+' months · $0 down. No purchase taxes, incentives or trade equity modeled. Not a verified offer or approval.';
+ }
+ byId('quickOfficial').href=data.url;
+ byId('quickEffLabel').innerHTML=kind==='gas'?'Current fuel efficiency <em>MPG</em>':'Current EV efficiency <em>kWh / 100 mi</em>';
+ byId('quickInputNote').textContent='Example assumptions · '+(kind==='gas'?money(currentEnergyRate)+'/gal gas':money(currentEnergyRate)+'/kWh for current EV')+' · '+(homePercent?homePercent+'% home at '+money(homeRate)+'/kWh, '+(100-homePercent)+'% public at ':'100% public at ')+money(publicRate)+'/kWh. Edit electricity, gas and offers in Advanced Analysis.';
+ byId('quickOfferNote').textContent=offerNote;
+ const label=byId('quickResultTitle'),big=byId('quickDifference'),caption=byId('quickDifferenceCaption');
+ if(!paymentText || !Number.isFinite(Number(paymentText)) || Number(paymentText)<0 || efficiency<=0){
+   label.textContent='Add customer numbers to compare';big.textContent='—';
+   caption.textContent='Enter the current monthly payment (enter $0 if paid off) and efficiency.';
+   byId('quickCurrentTotal').textContent='—';
+   byId('quickTeslaTotal').textContent='—';
+   byId('quickAnnualDifference').textContent='—';return;
+ }
+ const current=Number(paymentText)+currentEnergyPerMonth,tesla=offerPayment+newEnergyPerMonth,difference=current-tesla;
+ const abs=Math.abs(difference),positive=difference>=1,negative=difference<=-1;
+ label.textContent=positive?'Potential monthly reduction':negative?'Estimated extra per month':'Approximately the same monthly cost';
+ big.textContent=usd(abs);
+ caption.textContent=positive
+  ?'This sample suggests a lower payment + energy cost. Verify the full quote before recommending an order.'
+  :negative?'This sample costs more in payment + energy. Additional ownership factors could change the comparison.'
+  :'This sample shows similar payment + energy spending; compare the full ownership picture.';
+ byId('quickCurrentTotal').textContent=usd(current)+'/mo';
+ byId('quickTeslaTotal').textContent=usd(tesla)+'/mo';
+ byId('quickAnnualDifference').textContent=(positive?'−':negative?'+':'')+usd(abs*12)+'/year'+(positive?' potential reduction':negative?' additional':' difference');
+ big.style.color=positive?'#ffffff':negative?'#ffceba':'#ffffff';
+}
+for(const btn of document.querySelectorAll('[data-quick-type]'))btn.addEventListener('click',()=>{
+ kind=btn.dataset.quickType;
+ byId('quickEfficiency').value=kind==='gas'?'25':'28';
+ document.querySelectorAll('[data-quick-type]').forEach(el=>{const active=el===btn;el.classList.toggle('active',active);el.setAttribute('aria-pressed',String(active))});
+ render();
+});
+for(const btn of document.querySelectorAll('[data-quick-charge]'))btn.addEventListener('click',()=>{
+ charge=btn.dataset.quickCharge;
+ document.querySelectorAll('[data-quick-charge]').forEach(el=>{const active=el===btn;el.classList.toggle('active',active);el.setAttribute('aria-pressed',String(active))});
+ render();
+});
+for(const id of ['quickPayment','quickMiles','quickEfficiency','quickModel','quickDeal']){
+ for(const event of ['input','change'])byId(id).addEventListener(event,render);
+}
+function updateField(id,value,event='input'){
+ const el=byId(id);if(!el)return;
+ el.value=String(value);el.dispatchEvent(new Event(event,{bubbles:true}));
+}
+function syncToAdvanced(){
+ if(!openedOnce){
+   // Never silently use sample trade equity or outstanding debt for the first personalized handoff.
+   updateField('balance',0);updateField('trade',0);
+   updateField('taxes',0);updateField('credit',0);updateField('down',0);
+   openedOnce=true;
+ }
+ updateField('type',kind,'change');
+ updateField('actualpay',read('quickPayment'));
+ updateField('eff',read('quickEfficiency'));
+ if(kind==='ev')updateField('gasprice',0.18);
+ updateField('model',byId('quickModel').value,'change');
+ updateField('dealType',byId('quickDeal').value,'change');
+ const yearly=document.querySelector('[data-unit="yearly"]');if(yearly)yearly.click();
+ updateField('miles',read('quickMiles')*12);
+ updateField('homeShare',charge==='public'?0:70);
+}
+function openAdvanced(destination){
+ syncToAdvanced();
+ byId('advancedPanel').hidden=false;
+ document.dispatchEvent(new Event('upgradeLabAdvancedOpen'));
+ requestAnimationFrame(()=>{
+   window.dispatchEvent(new Event('resize'));
+   (destination==='map'?byId('chargingLocator'):byId('advancedPanel')).scrollIntoView({behavior:'smooth',block:'start'});
+ });
+}
+byId('quickAdvancedBtn').addEventListener('click',()=>openAdvanced());
+byId('quickSeeBreakdown').addEventListener('click',()=>openAdvanced());
+byId('quickCloseAdvanced').addEventListener('click',()=>{
+ // Reflect confirmed details from the advanced inputs back into the short form.
+ kind=byId('type').value;byId('quickPayment').value=byId('actualpay').value||byId('quickPayment').value;
+ byId('quickEfficiency').value=byId('eff').value;
+ const unit=document.querySelector('[data-unit].active')?.dataset.unit||'yearly';
+ const annual=read('miles')*(unit==='weekly'?52:unit==='monthly'?12:1);
+ byId('quickMiles').value=Math.round(annual/12);
+ const model=byId('model').value;
+ if(model==='Model Y'||model==='Model 3')byId('quickModel').value=model;
+ byId('quickDeal').value=byId('dealType').value;
+ charge=read('homeShare')===0?'public':'mixed';
+ document.querySelectorAll('[data-quick-type]').forEach(el=>{const active=el.dataset.quickType===kind;el.classList.toggle('active',active);el.setAttribute('aria-pressed',String(active))});
+ document.querySelectorAll('[data-quick-charge]').forEach(el=>{const active=el.dataset.quickCharge===charge;el.classList.toggle('active',active);el.setAttribute('aria-pressed',String(active))});
+ byId('advancedPanel').hidden=true;
+ window.scrollTo({top:Math.max(0,byId('quickQuote').offsetTop-24),behavior:'smooth'});
+ render();
+});
+render();
+})();
+</script>
+
 </body>
 </html>
