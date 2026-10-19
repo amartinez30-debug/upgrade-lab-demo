@@ -435,7 +435,7 @@
    <div><span>Gas engine/transmission failure scenario ($; optional, once)</span><input id="maintEngineEvent" type="number" min="0" max="60000" step="250" value="0" aria-label="Optional one-time engine or transmission repair scenario cost"></div>
   </div>
  </div>
- <div class="maint-disclaimer">Comparisons apply today's entered annual figures evenly over eight years with no price inflation, changes in mileage, or deterioration modeled. A gas-car engine or transmission failure is <strong>not</strong> assumed: enter a one-time hypothetical cost only when discussing a clearly labeled scenario. Tesla's battery/drive warranty does not establish a probability of a covered failure, and other carmakers may offer powertrain warranties too. The Tesla basic warranty does not eliminate mechanical issues or cover ordinary maintenance, wear, or every breakdown. <a href="https://www.tesla.com/support/vehicle-warranty" target="_blank" rel="noopener noreferrer">Official Tesla warranty ↗</a> · <a href="https://www.tesla.com/vehicle-warranty" target="_blank" rel="noopener noreferrer">Review terms ↗</a> · <a href="https://www.tesla.com/support/vehicle-maintenance" target="_blank" rel="noopener noreferrer">Tesla maintenance ↗</a></div>
+ <div class="maint-disclaimer">Comparisons apply today's entered annual figures evenly over eight years with no price inflation, changes in mileage, or deterioration modeled. A gas-car engine or transmission failure is <strong>not</strong> assumed: enter a one-time hypothetical cost only when discussing a clearly labeled scenario. Tesla's battery/drive warranty does not establish a probability of a covered failure, and other carmakers may offer powertrain warranties too. The Tesla basic warranty does not eliminate mechanical issues or cover ordinary maintenance, wear, or every breakdown. <a href="https://www.tesla.com/support/vehicle-warranty" target="_blank" rel="noopener noreferrer">Official Tesla warranty ↗</a> · <a href="https://digitalassets.tesla.com/tesla-contents/image/upload/tesla-new-vehicle-limited-warranty-en-us.pdf" target="_blank" rel="noopener noreferrer">Review terms ↗</a> · <a href="https://service.tesla.com/docs/Public/diy/model3/en_us/GUID-A84FDD77-7A8C-42F6-9385-E3F9CEE245A4.html" target="_blank" rel="noopener noreferrer">Tesla maintenance ↗</a></div>
  <div class="maint-actions"><button id="maintApply" class="btn" type="button">Apply estimated monthly costs to detailed comparison ↗</button><span id="maintApplyStatus" role="status">The estimate above does not affect the full ownership comparison until applied.</span></div>
 </section>
 
@@ -691,9 +691,9 @@ async function applyEPARecord(){
  finally{btn.disabled=false;btn.textContent='Apply EPA fuel economy';}
 }
 $('applyEPA').addEventListener('click',applyEPARecord);
-$('ownerClass').addEventListener('change',()=>{assignClass($('ownerClass').value);ownershipOrigin=matchedVehicle?'VIN + class estimates':'Inputs / class estimates';calc();});
+$('ownerClass').addEventListener('change',()=>{assignClass($('ownerClass').value);ownershipOrigin=matchedVehicle?'VIN identity + tire-free service scenario':'Tire-free editable assumptions';calc();});
 $('deprate').addEventListener('input',calc);
-$('autoMaint').addEventListener('change',()=>{refreshMaintenance();ownershipOrigin=matchedVehicle?'VIN + class estimates':'Inputs / class estimates';calc();});
+$('autoMaint').addEventListener('change',()=>{refreshMaintenance();ownershipOrigin=matchedVehicle?'VIN identity + tire-free service scenario':'Tire-free editable assumptions';calc();});
 $('applyAAABenchmarks').addEventListener('click',()=>{
  const b=ownerBench();$('oldins').value=(b.insurance/12).toFixed(2);
  $('autoMaint').checked=false;ownershipOrigin='AAA insurance category reference';calc();
