@@ -257,7 +257,7 @@
   </div>
 </section>
 <section id="advancedPanel" class="advanced-panel" hidden aria-label="Advanced ownership analysis">
-  <div class="advanced-toolbar"><div><div class="quick-eyebrow">DETAILED VIEW</div><strong>Advanced Analysis</strong><p>Optional full financial picture, VIN matching and charging locations.</p></div><button type="button" id="quickCloseAdvanced" class="quick-detail-button">Close details ↑</button></div>
+  <div class="advanced-toolbar"><div><div class="quick-eyebrow">DETAILED VIEW</div><strong>Advanced Analysis</strong><p>Optional full financial picture, VIN matching and charging locations. Enter actual loan payoff and trade-in before treating this as an ownership estimate.</p></div><button type="button" id="quickCloseAdvanced" class="quick-detail-button">Close details ↑</button></div>
 <div class="section-head"><h2>The upgrade story, three easy swipes</h2><small>New results after every edit · Scroll down for the full picture.</small></div>
 <main class="workspace">
 <section class="input-panel" id="journey" aria-labelledby="journeyTitle">
@@ -940,6 +940,7 @@ $('searchRadius').addEventListener('change',()=>{if(currentCenter){rangeRing?.se
 for(const ev of ['input','change']){for(const id of ['miles','evEff','homeShare','publiccost'])$(id).addEventListener(ev,refreshSnapshot);}
 document.querySelectorAll('[data-unit]').forEach(b=>b.addEventListener('click',refreshSnapshot));
 $('reset').addEventListener('click',()=>{selectedKey=null;rates.clear();refreshSnapshot();renderMarkers();renderStations();});
+document.addEventListener('upgradeLabAdvancedOpen',()=>{setTimeout(()=>{if(map)map.invalidateSize();},160);});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initMap);else initMap();
 refreshSnapshot();
 })();
