@@ -304,7 +304,7 @@
 <div class="mileage-head"><label for="miles">How much do they drive?</label><div class="segmented" id="mileUnit"><button type="button" data-unit="weekly">Weekly</button><button type="button" data-unit="monthly">Monthly</button><button type="button" class="active" data-unit="yearly">Yearly</button></div></div>
 <div class="field"><input id="miles" type="number" min="0" step="100" value="18000"><div class="inline-note" id="milesExplain">18,000 estimated miles per year.</div></div>
 <div class="row2"><div class="field"><label id="oldEffLabel" for="eff">Current efficiency (MPG)</label><input id="eff" type="number" min="1" max="300" step=".1" value="23"></div><div class="field"><label id="oldEnergyPriceLabel" for="gasprice">Gasoline ($/gal)</label><input id="gasprice" type="number" min="0" max="20" step=".01" value="3.8"></div></div>
-<div class="row2"><div class="field"><label for="oldins">Insurance ($/mo)</label><input id="oldins" type="number" min="0" value="155"></div><div class="field"><label for="oldmaint">Maintenance + repairs ($/mo; no tires)</label><input id="oldmaint" type="number" min="0" value="130"></div></div>
+<div class="row2"><div class="field"><label for="oldins">Insurance ($/mo)</label><input id="oldins" type="number" min="0" value="155"></div><div class="field"><label for="oldmaint">Maintenance + repairs ($/mo; no tires)</label><input id="oldmaint" type="number" min="0" value="25.08"></div></div>
 
 <details class="ownership-disclosure" id="ownershipDetails"><summary><span><strong>Advanced ownership intelligence</strong><small>VIN-based vehicle details, editable tire-free service scenario, depreciation</small></span><span class="summary-chevron">＋</span></summary><div class="ownership-input" id="ownershipEstimator">
   <div class="eyebrow-small">Vehicle ownership intelligence</div>
@@ -354,7 +354,7 @@
 <div class="field"><label for="evEff">Tesla energy consumption (kWh/100 mi)</label><input id="evEff" type="number" min="1" max="100" step=".1" value="28"></div>
 <div class="row2"><div class="field"><label for="homecost">Home electricity ($/kWh)</label><input id="homecost" type="number" min="0" max="5" step=".01" value=".18"></div><div class="field"><label for="publiccost">Public charging ($/kWh)</label><input id="publiccost" type="number" min="0" max="5" step=".01" value=".42"></div></div>
 <div class="field"><label for="homeShare">Home charging share <em id="shareLabel">70%</em></label><input id="homeShare" style="height:24px;padding:0;accent-color:#171a20" type="range" min="0" max="100" value="70"></div>
-<div class="row2"><div class="field"><label for="newins">Insurance ($/mo)</label><input id="newins" type="number" min="0" value="175"></div><div class="field"><label for="newmaint">Maintenance + repairs ($/mo; no tires)</label><input id="newmaint" type="number" min="0" value="45"></div></div>
+<div class="row2"><div class="field"><label for="newins">Insurance ($/mo)</label><input id="newins" type="number" min="0" value="175"></div><div class="field"><label for="newmaint">Maintenance + repairs ($/mo; no tires)</label><input id="newmaint" type="number" min="0" value="10"></div></div>
 <div class="field"><label for="charger">One-time home charger setup ($) <em>Upfront, not monthly</em></label><input id="charger" type="number" min="0" step="50" value="0"></div>
 <div id="loanWarn"></div>
 <div class="slide-cta"><button type="button" class="btn btn-ghost" data-go="1">← Previous</button><button type="button" class="btn btn-red" data-see-results>Reveal the comparison ↓</button></div></article>
@@ -1240,8 +1240,9 @@ function calculate(){
  $('maintBatteryYears').textContent='Whichever first · estimated '+(batteryY<8?batteryY.toFixed(1)+' years at current mileage':'8-year term at current mileage')+'. Min. 70% battery capacity retention; terms apply.';
  const baseline=gasYr-teslaYr;
  if($('quickWarrantyLine')){
-  const shortName=warrantyModel();
-  $('quickWarrantyLine').textContent='New '+shortName+' basic coverage: 4 years / 50,000 mi. Battery + drive: 8 years / '+(mileageTier/1000)+'k mi ('+('Model S Model X Cybertruck'.includes(shortName)?'model-specific':'selected trim')+'). Covered defects, not a no-breakdown guarantee.';
+  const shortName=$('quickModel')?.value||warrantyModel();
+  const range=['Model 3','Model Y'].includes(shortName)?'100,000–120,000 mi depending on exact trim':'up to 150,000 mi depending on model';
+  $('quickWarrantyLine').textContent='New '+shortName+': basic 4 years / 50,000 mi; battery & drive unit up to 8 years / '+range+'. Covers eligible defects, not routine maintenance or a no-breakdown guarantee.';
  }
  const status=$('maintSource');
  if(vinIdentity){
