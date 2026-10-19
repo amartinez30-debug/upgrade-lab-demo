@@ -197,6 +197,34 @@
 @media(max-width:530px){.hero{min-height:170px}.hero h1{font-size:29px;letter-spacing:-1.2px}.hero p{font-size:12px}.quick-section{margin-top:17px}.quick-heading{display:block}.quick-heading h2{font-size:30px}.quick-flag{display:inline-block;margin-top:10px}.quick-form-card,.quick-result-card{padding:19px 17px}.quick-card-top{display:block}.quick-card-top small{display:block;margin-top:4px}.quick-fields{gap:6px}.quick-field input,.quick-field select{font-size:16px;padding:0 7px}.quick-field span{font-size:10px}.quick-field em{display:block}.quick-big-number{font-size:56px}.quick-mini-rows span{max-width:65%}.advanced-toolbar{display:block}.quick-charge-tabs button,.quick-vehicle-tabs button{padding:12px 5px}}
 @media print{.quick-section{display:none}.advanced-panel[hidden]{display:block!important}}
 
+
+.maint-comparison{margin:25px 0;background:white;border:1px solid #e3e6e9;border-radius:8px;overflow:hidden}
+.maint-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:27px 27px 14px}
+.maint-head h2{font-size:24px;font-weight:600;letter-spacing:-.7px;margin:7px 0 8px}
+.maint-head p{font-size:12px;color:#696f75;line-height:1.6;max-width:700px;margin:0}
+.maint-context{font-size:10px;color:#3b444c;background:#f3f5f6;border:1px solid #e3e6e8;border-radius:4px;padding:9px;max-width:235px}
+.maint-warning{color:#666e78;font-size:11px;line-height:1.65;margin:0 27px 18px;padding:12px 13px;background:#f8f9fa;border-left:3px solid #bfc6cc}
+.maint-controls{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 27px 23px}
+.maint-card{border:1px solid #e4e8eb;border-radius:6px;padding:19px}
+.maint-overline{font-size:9px;letter-spacing:1.6px;font-weight:800;color:#737a82}
+.maint-card h3{margin:9px 0 17px;font-size:17px}
+.maint-input-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.maint-input-grid label{min-width:0}.maint-input-grid label span{display:block;font-size:11px;line-height:1.5;color:#575f67;margin-bottom:6px}
+.maint-input-grid input,.maint-input-grid select,.maint-forecast-rows input{height:40px;padding:0 9px;background:#fcfcfd;border:1px solid #dfe3e7;border-radius:4px;max-width:100%;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.maint-hint{font-size:10px;line-height:1.55;color:#7b8188;min-height:47px;margin:14px 0}
+.maint-metrics{display:flex;border-top:1px solid #e9ebed;padding-top:14px;gap:18px;flex-wrap:wrap}
+.maint-metrics span{font-size:10px;color:#747981;flex:1;min-width:110px}.maint-metrics strong{font-size:23px;font-variant-numeric:tabular-nums;color:#171a20;display:block;margin-top:4px}
+.maint-warranty-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#171a20;padding:22px 27px;color:white}
+.maint-warranty-strip div{display:grid;gap:6px}.maint-warranty-strip span{color:#b6bdc4;font-size:9px;font-weight:700;letter-spacing:1.5px}.maint-warranty-strip strong{font-size:19px;font-weight:600}.maint-warranty-strip small{font-size:10px;color:#b8c0c8;line-height:1.5}
+.maint-forecast{padding:24px 27px;display:grid;grid-template-columns:.8fr 1fr;gap:25px}
+.maint-forecast-amount strong{display:block;font-size:clamp(30px,3.5vw,48px);font-weight:600;letter-spacing:-1.8px;margin:8px 0}.maint-forecast-amount span{font-size:11px;color:#6b737c}
+.maint-forecast-rows{display:grid;gap:12px}.maint-forecast-rows>div{display:flex;align-items:center;justify-content:space-between;gap:12px}.maint-forecast-rows span{font-size:11px;line-height:1.4;color:#6b737c}.maint-forecast-rows strong{font-size:19px;font-variant-numeric:tabular-nums}.maint-forecast-rows input{width:110px;flex-shrink:0}
+.maint-disclaimer{border-top:1px solid #e9ebee;margin:0 27px;padding:15px 0;font-size:10px;line-height:1.65;color:#6c747d}.maint-disclaimer a{text-decoration:underline;color:#3c4752}
+.maint-actions{display:flex;gap:13px;align-items:center;flex-wrap:wrap;padding:0 27px 25px}.maint-actions span{font-size:11px;color:#686f77;line-height:1.5}
+.quick-warranty{padding-top:13px;font-size:10px;line-height:1.6;color:#d5dce2;border-top:1px solid #42474f}
+@media(max-width:800px){.maint-head{display:block}.maint-context{display:inline-block;margin-top:12px}.maint-controls,.maint-forecast{grid-template-columns:1fr}.maint-hint{min-height:unset}}
+@media(max-width:530px){.maint-head{padding:20px}.maint-warning{margin:0 20px 16px}.maint-controls{padding:0 20px 20px}.maint-warranty-strip{padding:19px 20px;gap:19px}.maint-warranty-strip strong{font-size:15px}.maint-forecast{padding:19px 20px}.maint-disclaimer{margin:0 20px}.maint-actions{padding:0 20px 20px}}
+
 </style>
 </head>
 <body>
@@ -247,7 +275,7 @@
         <div><span>New Tesla · payment + charging</span><strong id="quickTeslaTotal">—</strong></div>
         <div><span>Difference over 12 months</span><strong id="quickAnnualDifference">—</strong></div>
       </div>
-      <div class="quick-note" id="quickOfferNote">Illustrative lease. Upfront amount and mileage are included in the normalized comparison.</div>
+      <div class="quick-warranty" id="quickWarrantyLine">Tesla coverage: Basic 4 years/50,000 miles · battery and drive unit up to 8 years (100k–120k miles, depending on trim). Terms and exclusions apply.</div><div class="quick-note" id="quickOfferNote">Illustrative lease. Upfront amount and mileage are included in the normalized comparison.</div>
       <div class="quick-disclosure">Illustrative estimates, <b>not current promotions or Tesla quotes</b>. Comparison includes payment and energy only; it excludes both vehicles' insurance, maintenance, registration and other recurring expenses, and unentered taxes/fees. Trade-in equity, outstanding balance, eligibility and charging losses are not modeled here. An advertised lease payment is not equivalent to the full monthly cost.</div>
       <div class="quick-action-group">
         <button type="button" id="quickSeeBreakdown" class="quick-primary">Personalize full comparison ↓</button>
@@ -363,6 +391,53 @@
 </section>
 </main>
 <div class="mobile-savings-dock" id="mobileSavingsDock"><div><small>ESTIMATED MONTHLY DIFFERENCE</small><strong id="dockDelta">—</strong></div><button type="button" data-see-results>See breakdown ↓</button></div>
+
+<section class="maint-comparison" id="maintenanceComparison" aria-labelledby="maintSectionTitle">
+ <div class="maint-head">
+  <div><div class="quick-eyebrow">SERVICE, REPAIR & WARRANTY</div><h2 id="maintSectionTitle">What could maintenance look like over 8 years?</h2>
+   <p>Use VIN-decoded vehicle details and editable tire-free estimates. No tire replacements, tire rotation or wheel work are added.</p></div>
+  <span class="maint-context" id="maintVehicleLabel">Current vehicle: enter VIN for identified model</span>
+ </div>
+ <div class="maint-warning" id="maintSource">A VIN identifies the car but cannot retrieve its actual repair history or exact future service bill. This estimator uses illustrative service prices and intervals; enter shop quotes or maintenance records for precision.</div>
+ <div class="maint-controls">
+  <div class="maint-card">
+   <div class="maint-overline">CURRENT VEHICLE · MAINTENANCE</div>
+   <h3>Engine and routine service</h3>
+   <div class="maint-input-grid">
+    <label><span>Oil service every (miles)</span><input id="maintOilInterval" type="number" min="1000" max="30000" step="500" value="7500"></label>
+    <label><span>Price per oil service ($)</span><input id="maintOilCost" type="number" min="0" max="1000" step="5" value="90"></label>
+    <label><span>Other scheduled service ($/year)</span><input id="maintCurrentOther" type="number" min="0" max="20000" step="25" value="85"></label>
+    <label><span>Unscheduled repair allowance ($/year)</span><input id="maintRepairReserve" type="number" min="0" max="30000" step="25" value="0"></label>
+   </div>
+   <div class="maint-hint">Oil interval and amounts are examples, not manufacturer-prescribed VIN-specific service. For an existing EV, oil services are automatically excluded. The repair allowance is $0 until you enter a supported estimate; $0 does not imply zero repairs.</div>
+   <div class="maint-metrics"><span>Estimated annual <strong id="maintCurrentYear">—</strong></span><span>Monthly equivalent <strong id="maintCurrentMonth">—</strong></span></div>
+  </div>
+  <div class="maint-card">
+   <div class="maint-overline">NEW TESLA · MAINTENANCE</div>
+   <h3>Routine service + warranty</h3>
+   <div class="maint-input-grid">
+    <label><span>Routine service ($/year)</span><input id="maintTeslaRoutine" type="number" min="0" max="20000" step="10" value="120"></label>
+    <label><span>Battery/drive warranty tier</span><select id="maintBatteryTier"><option value="100000">8 yrs / 100,000 mi</option><option value="120000">8 yrs / 120,000 mi</option></select></label>
+   </div>
+   <div class="maint-hint">The $120/year example is editable, not an official Tesla maintenance quote. Covers modeled filters, wipers and service checks only. Not all repairs are covered by warranties.</div>
+   <div class="maint-metrics"><span>Estimated annual <strong id="maintTeslaYear">—</strong></span><span>Monthly equivalent <strong id="maintTeslaMonth">—</strong></span></div>
+  </div>
+ </div>
+ <div class="maint-warranty-strip">
+  <div><span>BASIC NEW VEHICLE WARRANTY</span><strong>4 years / 50,000 miles</strong><small id="maintBasicMiles">Whichever comes first · covered defects, not zero breakdowns</small></div>
+  <div><span>BATTERY & DRIVE UNIT WARRANTY</span><strong id="maintBatteryWarranty">8 years / 100,000 miles</strong><small id="maintBatteryYears">Trim-dependent · 70% battery retention threshold · covered failures only</small></div>
+ </div>
+ <div class="maint-forecast">
+  <div class="maint-forecast-amount"><div class="quick-eyebrow">EIGHT-YEAR ILLUSTRATIVE SCENARIO</div><strong id="maintEightSavings">—</strong><span id="maintEightSavingsLabel">Estimated service-cost difference · excluding tires</span></div>
+  <div class="maint-forecast-rows">
+   <div><span>Keep current vehicle · 8 years</span><strong id="maintEightCurrent">—</strong></div>
+   <div><span>New Tesla · 8 years</span><strong id="maintEightTesla">—</strong></div>
+   <div><span>Gas engine/transmission failure scenario ($; optional, once)</span><input id="maintEngineEvent" type="number" min="0" max="60000" step="250" value="0" aria-label="Optional one-time engine or transmission repair scenario cost"></div>
+  </div>
+ </div>
+ <div class="maint-disclaimer">Comparisons apply today's entered annual figures evenly over eight years with no price inflation, changes in mileage, or deterioration modeled. A gas-car engine or transmission failure is <strong>not</strong> assumed: enter a one-time hypothetical cost only when discussing a clearly labeled scenario. Tesla's battery/drive warranty does not establish a probability of a covered failure, and other carmakers may offer powertrain warranties too. The Tesla basic warranty does not eliminate mechanical issues or cover ordinary maintenance, wear, or every breakdown. <a href="https://www.tesla.com/support/vehicle-warranty" target="_blank" rel="noopener noreferrer">Official Tesla warranty ↗</a> · <a href="https://www.tesla.com/vehicle-warranty" target="_blank" rel="noopener noreferrer">Review terms ↗</a> · <a href="https://www.tesla.com/support/vehicle-maintenance" target="_blank" rel="noopener noreferrer">Tesla maintenance ↗</a></div>
+ <div class="maint-actions"><button id="maintApply" class="btn" type="button">Apply estimated monthly costs to detailed comparison ↗</button><span id="maintApplyStatus" role="status">The estimate above does not affect the full ownership comparison until applied.</span></div>
+</section>
 
 <section class="locator-section" id="chargingLocator" aria-labelledby="locatorHeading">
   <header class="locator-header">
