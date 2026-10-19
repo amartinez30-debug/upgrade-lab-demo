@@ -710,20 +710,55 @@ function renderMarkers(){
   marker.addTo(pinLayer);s.marker=marker;
  }
 }
-function showResults(items, coords){const max=Number($('searchRadius').value),unique=new Map();
- for(const el of items){const loc=stationCoords(el);if(!Number.isFinite(loc[0])||!Number.isFinite(loc[1]))continue;
- const d=distMi(coords,loc);if(d>max+.15)continue;const t=el.tags||{};
- const access=stationAccess(t).toLowerCase();if(['private','no'].includes(access))continue;
- const k=el.type+':'+el.id;
- // A station may be mapped as both a node and an area; avoid duplicate pins at same coordinates/name.
- const dup=[...unique.values()].some(s=>s.name===stationName(t)&&distMi(s.coords,loc)<.025);if(dup)continue;
- unique.set(k,{key:k,coords:loc,distance:d,name:stationName(t),tags:t});
+function showResults(items,coords,afdcItems=[],afdcNote=''){
+ const max=Number($('searchRadius').value),unique=new Map();
+ for(const el of items){
+  const loc=stationCoords(el);if(!Number.isFinite(loc[0])||!Number.isFinite(loc[1]))continue;
+  const d=distMi(coords,loc);if(d>max+.15)continue;const t=el.tags||{};
+  if(['private','no'].includes(stationAccess(t).toLowerCase()))continue;
+  const k=el.type+':'+el.id;
+  const dup=[...unique.values()].some(s=>s.name===stationName(t)&&distMi(s.coords,loc)<.025);
+  if(dup)continue;
+  unique.set(k,{key:k,coords:loc,distance:d,name:stationName(t),tags:t,source:'OSM'});
  }
- stations=[...unique.values()].sort((a,b)=>a.distance-b.distance).slice(0,120);selectedKey=null;rates.clear();
+ let supplemented=0;
+ for(const row of afdcItems){
+  const lat=Number(row.latitude),lon=Number(row.longitude);
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)<.001||Math.abs(lon)<.001)continue;
+  const loc=[lat,lon],d=distMi(coords,loc);if(d>max+.15)continue;
+  if(String(row.access_code||'public').toLowerCase()==='private')continue;
+  const name=String(row.station_name||row.ev_network||'Charging location').trim().slice(0,150);
+  const provider=String(row.ev_network||'').slice(0,120);
+  const tags={name,operator:provider,network:provider,access:'public'};
+  for(const c of row.ev_connector_types||[]){tags['socket:'+String(c).toLowerCase()]=1;}
+  const candidate={key:'afdc:'+row.id,coords:loc,distance:d,name,tags,network:provider,
+   afdcPrice:String(row.ev_pricing||'').trim().slice(0,260),afdcConfirmed:row.date_last_confirmed||'',
+   source:'DOE AFDC'};
+  const n=networkInfo(candidate).name;
+  const match=[...unique.values()].find(s=>{
+    const distance=distMi(s.coords,loc);if(distance>.07)return false;
+    const existing=networkInfo(s).name;
+    const nameMatch=s.name.toLowerCase()===name.toLowerCase();
+    return nameMatch||(distance<.025&&(existing===n||existing==='Other network'));
+  });
+  if(match){
+    if(candidate.afdcPrice)match.afdcPrice=candidate.afdcPrice;
+    if(candidate.afdcConfirmed)match.afdcConfirmed=candidate.afdcConfirmed;
+    if(n!=='Other network'&&networkInfo(match).name==='Other network')match.network=provider;
+    supplemented++;
+  }else unique.set(candidate.key,candidate);
+ }
+ stations=[...unique.values()].sort((a,b)=>{
+  const pa=getRate(a)!==null?0:1,pb=getRate(b)!==null?0:1;
+  return pa-pb||a.distance-b.distance;
+ }).slice(0,140);
+ selectedKey=null;rates.clear();
  if(map){renderMarkers();map.setView(coords,Math.max(10,max===1?14:max===3?13:max===5?12:11));rangeRing?.setRadius(milesToM(max));}
  renderStations();refreshSnapshot();
- if(!stations.length)status('No public or unspecified-access charging stations were returned from the community map for this area. Try a larger radius or check ChargePoint/PlugShare.','error');
- else {status('Found '+stations.length+' community-listed charging locations. Locations may be incomplete; prices and availability must be confirmed in the network app.','success');}
+ const known=stations.filter(s=>getRate(s)!==null).length;
+ const message='Found '+stations.length+' locations; '+known+' publicly reported per-kWh/free rates. '+(afdcItems.length?'DOE data also checked. ':'')+(afdcNote?afdcNote+' ':'')+'Listed prices are NOT verified live tariffs.';
+ if(!stations.length)status('No station locations available from public directories in this area. Try a wider radius or the network apps. '+afdcNote,'error');
+ else status(message,known?'success':'');
 }
 async function fetchJSON(url,opt={},timeout=16000){const c=new AbortController();const t=setTimeout(()=>c.abort(),timeout);
  try{const r=await fetch(url,{...opt,signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}
