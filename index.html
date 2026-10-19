@@ -652,28 +652,62 @@ function applyRate(key){const s=stations.find(x=>x.key===key);if(!s)return;
  // This rate applies to the PUBLIC-charging share; home share remains adjustable.
  refreshSnapshot();renderStations();renderMarkers();status('Applied '+usd(rate)+'/kWh to the public charging rate in your Tesla comparison. Confirm additional station/session/parking fees.','success');
 }
-function renderStations(){const list=$('stationList');list.textContent='';const show=stations.filter(s=>!$('cheaperOnly').checked||priceStatus(s)==='cheaper');
- $('locatorCount').textContent=stations.length ? (show.length+' of '+stations.length+' locations') : (currentCenter?'No matches':'Search an area to begin');
- if(stations.length&&!show.length){const p=document.createElement('div');p.className='locator-status';p.textContent='No listed or Advisor-entered station rates below this benchmark. Turn off the cheaper-only filter to see locations with unknown prices.';list.append(p);return;}
- const limit=60;
- for(const s of show.slice(0,limit)){
- const rate=getRate(s),state=priceStatus(s),card=document.createElement('article');card.className='station-card'+(selectedKey===s.key?' selected':'');
- const name=escaped(s.name),detail=escaped(plugText(s.tags)),op=escaped(s.tags.operator||s.tags.network||s.tags.brand||'Network not specified');
- const dist=s.distance.toFixed(1)+' mi',access=escaped(stationAccess(s.tags));
- card.innerHTML=`<div class="station-top"><div><div class="station-name">${name}</div><div class="station-meta">${op} · ${dist} straight-line<br/>${detail} · Access: ${access}</div></div><span class="station-badge ${state}">${rate===null?'Price unknown':usd(rate)+'/kWh'}</span></div>
- <div class="station-bottom"><span class="station-meta">${escaped(sourceLabel(s))}</span><div class="station-actions"><button type="button" data-view="${escaped(s.key)}">Map ↗</button><a href="https://www.google.com/maps/dir/?api=1&amp;destination=${s.coords[0]},${s.coords[1]}&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Directions ↗</a></div></div>
- <div class="station-price"><label for="quote-${escaped(s.key.replace(':','-'))}">Rate seen in charger app ($/kWh)</label><input id="quote-${escaped(s.key.replace(':','-'))}" aria-label="Verified charging rate at ${name}" type="number" min="0" max="5" step="0.01" placeholder="0.00" value="${rates.has(s.key)?rates.get(s.key):''}"><button data-apply="${escaped(s.key)}" type="button">Apply rate ↗</button></div>`;
- card.querySelector('[data-view]').addEventListener('click',()=>chooseStation(s.key));
- card.querySelector('[data-apply]').addEventListener('click',()=>applyRate(s.key));
- list.append(card);
+function verifyLink(s){
+ const name=networkInfo(s).name;
+ const links={
+ 'ChargePoint':'https://www.chargepoint.com/drivers',
+ 'Electrify America':'https://www.electrifyamerica.com/locate-charger/',
+ 'Tesla':'https://www.tesla.com/findus',
+ 'EVgo':'https://www.evgo.com/find-a-charger/',
+ 'Blink':'https://blinkcharging.com/',
+ 'EV Connect':'https://www.evconnect.com/',
+ 'Shell Recharge':'https://www.shell.us/motorist/electric-vehicle-charging.html',
+ 'FLO':'https://www.flo.com/',
+ 'IONNA':'https://ionna.com/'
+ };
+ return links[name]||'https://afdc.energy.gov/stations';
+}
+function renderStations(){
+ const list=$('stationList');list.textContent='';
+ const show=stations.filter(s=>!$('cheaperOnly').checked||priceStatus(s)==='cheaper');
+ $('locatorCount').textContent=stations.length?(show.length+' of '+stations.length+' locations · '+stations.filter(s=>getRate(s)!==null).length+' rate listings'):(currentCenter?'No matches':'Search an area to begin');
+ if(stations.length&&!show.length){
+  const p=document.createElement('div');p.className='locator-status';
+  p.textContent='No publicly listed or Advisor-confirmed per-kWh rates below your benchmark. A station with an unknown rate is not assumed cheaper; turn off the filter to see it.';
+  list.append(p);return;
+ }
+ for(const s of show.slice(0,90)){
+  const p=priceEvidence(s),rate=p.rate,state=priceStatus(s),net=networkInfo(s);
+  const card=document.createElement('article');card.className='station-card'+(selectedKey===s.key?' selected':'');
+  card.style.borderLeft='4px solid '+net.color;
+  const name=escaped(s.name),detail=escaped(plugText(s.tags));
+  const dist=s.distance.toFixed(1)+' mi',access=escaped(stationAccess(s.tags));
+  const priceLabel=rate===null?'Rate not published':(rate===0?'Reported free':usd(rate)+'/kWh');
+  const app=escaped(verifyLink(s));
+  card.innerHTML='<div class="station-top"><div><div class="station-name">'+name+'</div><div class="station-meta"><span class="station-network"><i style="background:'+net.color+'"></i>'+escaped(net.name)+'</span> · '+dist+' straight-line<br/>'+detail+' · Access: '+access+'</div></div><span class="station-badge '+state+'">'+escaped(priceLabel)+'</span></div>'
+  +'<div class="station-price-note">'+escaped(sourceLabel(s))+'<br/>'+escaped(p.raw||'No pricing terms published').slice(0,300)+'</div>'
+  +'<div class="station-bottom"><span class="station-meta">'+(state==='cheaper'?'Listed below benchmark · confirm fees':state==='more'?'At/above benchmark or matched rate':'Check price in network app')+'</span><div class="station-actions"><button type="button" data-view="'+escaped(s.key)+'">Map ↗</button><a href="'+app+'" target="_blank" rel="noopener noreferrer">Check network ↗</a><a href="https://www.google.com/maps/dir/?api=1&amp;destination='+s.coords[0]+','+s.coords[1]+'&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Directions ↗</a></div></div>'
+  +'<div class="station-price"><label for="quote-'+escaped(s.key.replace(':','-'))+'">Confirmed rate in network app ($/kWh)</label><input id="quote-'+escaped(s.key.replace(':','-'))+'" aria-label="Confirmed charging rate at '+name+'" type="number" min="0" max="5" step="0.01" placeholder="0.00" value="'+(rates.has(s.key)?rates.get(s.key):'')+'"><button data-apply="'+escaped(s.key)+'" type="button">Apply rate ↗</button></div>';
+  if(net.name==='ChargePoint'){
+   const extra=document.createElement('div');extra.className='station-price-note';
+   extra.textContent='ChargePoint may also charge a service fee for some paid sessions (published US account rates: $0.25 AC / $0.49 DC); plus possible parking/idle fees. Confirm in its app.';
+   card.append(extra);
+  }
+  card.querySelector('[data-view]').addEventListener('click',()=>chooseStation(s.key));
+  card.querySelector('[data-apply]').addEventListener('click',()=>applyRate(s.key));
+  list.append(card);
  }
 }
-function renderMarkers(){if(!map)return;pinLayer.clearLayers();
- for(const s of stations){if($('cheaperOnly').checked&&priceStatus(s)!=='cheaper')continue;
- const state=priceStatus(s),color=state==='cheaper'?'#1a744a':state==='more'?'#e82127':'#717780';
- const marker=L.circleMarker(s.coords,{radius:selectedKey===s.key?10:7,color:'#fff',weight:2,fillColor:color,fillOpacity:1});
- marker.bindPopup(`<strong>${escaped(s.name)}</strong><br/>${escaped(plugText(s.tags))}<br/>${getRate(s)===null?'Price unavailable':usd(getRate(s))+'/kWh · unverified'}<br/>${escaped(s.distance.toFixed(1))} miles (straight-line)`);
- marker.on('click',()=>{selectedKey=s.key;renderStations();refreshSnapshot();});marker.addTo(pinLayer);s.marker=marker;
+function renderMarkers(){
+ if(!map)return;pinLayer.clearLayers();networkLegend();
+ for(const s of stations){
+  if($('cheaperOnly').checked&&priceStatus(s)!=='cheaper')continue;
+  const n=networkInfo(s),p=priceEvidence(s);
+  const marker=L.circleMarker(s.coords,{radius:selectedKey===s.key?11:8,color:selectedKey===s.key?'#171a20':'#ffffff',weight:selectedKey===s.key?4:2.5,fillColor:n.color,fillOpacity:1});
+  const label=p.rate===null?'Per-kWh rate unavailable':(p.rate===0?'Reported free':usd(p.rate)+'/kWh · reported');
+  marker.bindPopup('<strong>'+escaped(s.name)+'</strong><br/>'+escaped(n.name)+'<br/>'+escaped(plugText(s.tags))+'<br/><b>'+escaped(label)+'</b><br/>'+escaped(sourceLabel(s))+'<br/>'+escaped((p.raw||'').slice(0,160))+'<br/>'+escaped(s.distance.toFixed(1))+' miles straight-line · confirm in app');
+  marker.on('click',()=>{selectedKey=s.key;renderStations();refreshSnapshot();renderMarkers();});
+  marker.addTo(pinLayer);s.marker=marker;
  }
 }
 function showResults(items, coords){const max=Number($('searchRadius').value),unique=new Map();
