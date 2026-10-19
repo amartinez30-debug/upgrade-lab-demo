@@ -1,0 +1,19 @@
+{
+  "name": "Upgrade Lab — Advisor Demo",
+  "short_name": "Upgrade Lab",
+  "description": "Independent vehicle ownership and upgrade comparison prototype. Not affiliated with Tesla.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f5f3",
+  "theme_color": "#f5f5f3",
+  "icons": [
+    {
+      "src": "./icons/upgrade-lab.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
