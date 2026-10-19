@@ -776,14 +776,33 @@ async function fetchStations(coords,radius){const meters=Math.round(milesToM(rad
  for(const base of endpoints){try{return (await fetchJSON(base,{method:'POST',body:new URLSearchParams({data:query}),headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}},18000)).elements||[];}catch(e){error=e;}}
  throw new Error('Charging map directory temporarily unavailable ('+(error?.message||'network error')+'). Try again or open ChargePoint/PlugShare.');
 }
+async function fetchAfdcStations(coords,radius){
+ // US DOE Alternative Fuels Data Center public API. DEMO_KEY is the published example key, not a private secret.
+ // AFDC station prices are user-reported/public listings and are NOT guaranteed to be live or complete.
+ const query=new URLSearchParams({
+   api_key:'DEMO_KEY',fuel_type:'ELEC',
+   latitude:String(coords[0]),longitude:String(coords[1]),
+   radius:String(Math.max(1,Math.ceil(radius))),limit:'180',access:'public'
+ });
+ const data=await fetchJSON('https://developer.nlr.gov/api/alt-fuel-stations/v1/nearest.json?'+query,{},14000);
+ if(!Array.isArray(data.fuel_stations))throw new Error('DOE rate directory did not return station records');
+ return data.fuel_stations;
+}
 async function doSearch(e){e.preventDefault();const address=$('locAddress').value.trim();if(address.length<3){status('Enter an address, ZIP code, or nearby landmark to search.','error');return;}
  addresses[currentTab]=address;const btn=$('locSearch'),req=++pending;btn.disabled=true;btn.textContent='Searching…';status('Locating the requested address…');
  try{const loc=await lookupAddress(address);if(req!==pending)return;
  currentCenter=loc.coords;currentLabel=loc.label;
  $('mapAreaLabel').textContent=currentTab.toUpperCase()+' · '+currentLabel;
  if(map){map.setView(loc.coords,13);centerPin.setLatLng(loc.coords).bindTooltip('Search location').openTooltip();rangeRing.setLatLng(loc.coords);rangeRing.setRadius(milesToM(Number($('searchRadius').value)));}
- status('Finding nearby public charging locations…');const result=await fetchStations(loc.coords,Number($('searchRadius').value));if(req!==pending)return;
- showResults(result,loc.coords);
+ status('Checking community locations and DOE-listed station prices…');
+ const searchRadius=Number($('searchRadius').value);
+ const [osm,doe]=await Promise.allSettled([fetchStations(loc.coords,searchRadius),fetchAfdcStations(loc.coords,searchRadius)]);
+ if(req!==pending)return;
+ if(osm.status==='rejected'&&doe.status==='rejected')throw new Error('Both the community station directory and public DOE feed are unavailable. Please retry later.');
+ const list=osm.status==='fulfilled'?osm.value:[];
+ const afdc=doe.status==='fulfilled'?doe.value:[];
+ const note=doe.status==='rejected'?'DOE pricing feed unavailable (rate limited or blocked); community tags only.':'';
+ showResults(list,loc.coords,afdc,note);
  }catch(error){if(req===pending)status('Search failed: '+error.message+' You can also use the ChargePoint or PlugShare links below.','error');}
  finally{if(req===pending){btn.disabled=false;btn.textContent='Find chargers ↗';}}
 }
