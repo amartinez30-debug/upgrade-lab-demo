@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Original electric sedan silhouette">
+  <rect width="512" height="512" rx="112" fill="#171a20"/>
+  <g transform="translate(51 151) scale(1.86)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 91C49 86 61 69 81 53C99 39 122 34 148 36C173 38 188 55 201 76L220 87" stroke="#f6f7f8" stroke-width="6.6"/>
+    <path d="M28 91L17 97C9 102 7 112 10 120C12 126 20 129 32 129H44M74 129H166M196 129H216C226 127 230 121 228 112L224 98L220 87" stroke="#f6f7f8" stroke-width="6.6"/>
+    <circle cx="59" cy="129" r="15" stroke="#f6f7f8" stroke-width="6.6"/>
+    <circle cx="181" cy="129" r="15" stroke="#f6f7f8" stroke-width="6.6"/>
+    <path d="M89 58C107 47 128 44 147 47M161 51L186 79" stroke="#879099" stroke-width="4"/>
+    <path d="M217 94L232 100" stroke="#e82127" stroke-width="6"/>
+  </g>
+</svg>
