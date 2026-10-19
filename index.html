@@ -266,7 +266,7 @@
 <nav class="journey-tabs" aria-label="Scenario pages"><button class="journey-tab active" data-go="0" type="button" aria-current="step"><span>01</span> Current vehicle</button><button class="journey-tab" data-go="1" type="button"><span>02</span> Daily driving</button><button class="journey-tab" data-go="2" type="button"><span>03</span> New Tesla</button></nav>
 <div class="journey-window"><div id="journeyTrack" class="journey-track" tabindex="0" aria-label="Swipe sideways between three customer screens">
  <article class="journey-slide" data-slide="0"><div class="slide-topline">CURRENT VEHICLE <span>1 OF 3 · START HERE</span></div><div class="step-head"><span class="step-num">01</span><h3>Current vehicle</h3><em>What they drive today</em></div>
-<div class="field"><label for="vin">VIN lookup <em>Optional · NHTSA</em></label><div class="vinrow"><input id="vin" placeholder="17-character VIN" maxlength="17" autocomplete="off"><button id="decodeVIN" type="button">Decode VIN</button></div><span id="vinstatus" class="vinstatus">VIN lookup uses NHTSA; EPA fuel economy may require choosing a trim. No loan or repair history is retrieved.</span></div>
+<div class="field"><label for="vin">VIN lookup <em>Optional · NHTSA</em></label><div class="vinrow"><input id="vin" placeholder="17-character VIN" maxlength="17" autocomplete="off"><button id="decodeVIN" type="button">Decode VIN</button></div><span id="vinstatus" class="vinstatus">NHTSA decodes vehicle identity; EPA matching may require a trim. Actual maintenance records, exact service prices and repairs are not available from VIN lookup.</span></div>
 <div class="field"><label for="vehicle">Vehicle description</label><input id="vehicle" value="2021 Gasoline SUV" placeholder="e.g. 2021 Honda CR-V"></div>
 <div class="row2"><div class="field"><label for="balance">Loan payoff estimate ($)</label><input id="balance" type="number" min="0" step="100" value="28000"></div><div class="field"><label for="oldapr">Current APR (%)</label><input id="oldapr" type="number" min="0" max="50" step=".01" value="8.4"></div></div>
 <div class="row2"><div class="field"><label for="oldterm">Months remaining</label><input id="oldterm" type="number" min="1" max="120" step="1" value="60"></div><div class="field"><label for="actualpay">Actual monthly payment ($) <em>Optional</em></label><input id="actualpay" type="number" min="0" step="1" placeholder="Use calculated"></div></div>
@@ -276,11 +276,11 @@
 <div class="mileage-head"><label for="miles">How much do they drive?</label><div class="segmented" id="mileUnit"><button type="button" data-unit="weekly">Weekly</button><button type="button" data-unit="monthly">Monthly</button><button type="button" class="active" data-unit="yearly">Yearly</button></div></div>
 <div class="field"><input id="miles" type="number" min="0" step="100" value="18000"><div class="inline-note" id="milesExplain">18,000 estimated miles per year.</div></div>
 <div class="row2"><div class="field"><label id="oldEffLabel" for="eff">Current efficiency (MPG)</label><input id="eff" type="number" min="1" max="300" step=".1" value="23"></div><div class="field"><label id="oldEnergyPriceLabel" for="gasprice">Gasoline ($/gal)</label><input id="gasprice" type="number" min="0" max="20" step=".01" value="3.8"></div></div>
-<div class="row2"><div class="field"><label for="oldins">Insurance ($/mo)</label><input id="oldins" type="number" min="0" value="155"></div><div class="field"><label for="oldmaint">Maintenance ($/mo)</label><input id="oldmaint" type="number" min="0" value="130"></div></div>
+<div class="row2"><div class="field"><label for="oldins">Insurance ($/mo)</label><input id="oldins" type="number" min="0" value="155"></div><div class="field"><label for="oldmaint">Maintenance + repairs ($/mo; no tires)</label><input id="oldmaint" type="number" min="0" value="130"></div></div>
 
-<details class="ownership-disclosure" id="ownershipDetails"><summary><span><strong>Advanced ownership intelligence</strong><small>VIN-based fuel economy, AAA category averages, depreciation</small></span><span class="summary-chevron">＋</span></summary><div class="ownership-input" id="ownershipEstimator">
+<details class="ownership-disclosure" id="ownershipDetails"><summary><span><strong>Advanced ownership intelligence</strong><small>VIN-based vehicle details, editable tire-free service scenario, depreciation</small></span><span class="summary-chevron">＋</span></summary><div class="ownership-input" id="ownershipEstimator">
   <div class="eyebrow-small">Vehicle ownership intelligence</div>
-  <div class="ownership-info">Decode a VIN, then match an EPA configuration for fuel economy. Maintenance and insurance benchmarks are <strong>2026 AAA vehicle-category averages for new cars</strong> — not verified averages for this exact used VIN.</div>
+  <div class="ownership-info">Decode a VIN with NHTSA to identify the year, make and model. An exact future service and repair bill cannot be retrieved from a VIN alone. The tire-free maintenance scenario below uses editable assumptions, not verified service history. AAA reference data here applies to insurance only.</div>
   <div class="field"><label for="ownerClass">Comparable vehicle category <em>Review this match</em></label>
     <select id="ownerClass">
       <option value="weighted">All vehicles · weighted reference</option>
@@ -294,13 +294,10 @@
     </select>
   </div>
   <div id="epaMatch" class="epa-match" aria-live="polite"><div class="field" style="margin:0"><label for="epaVariant">Select exact EPA vehicle configuration</label><select id="epaVariant"><option value="">Choose engine / drivetrain</option></select></div><button type="button" id="applyEPA" class="feature-btn">Apply EPA fuel economy</button></div>
-  <div class="row2">
-    <div class="field"><label for="maintRate">AAA maintenance + repairs + tires ($/mile)</label><input id="maintRate" type="number" min="0" max="2" step=".001" value=".1206"></div>
-    <div class="field"><label for="deprate">Estimated value decline (%/year)</label><input id="deprate" type="number" min="0" max="100" step=".5" value="10"></div>
-  </div>
-  <label class="ownership-check"><input id="autoMaint" type="checkbox"> Auto-calculate maintenance using annual miles × category rate (overwrites current maintenance field)</label>
-  <button type="button" id="applyAAABenchmarks" class="feature-btn">Use AAA category insurance + upkeep estimates</button>
-  <div class="ownership-meta" id="ownerClassStatus">2026 AAA compact-SUV new-car reference: 12.06¢/mile upkeep and $2,294/year full-coverage insurance.</div>
+  <div class="field"><label for="deprate">Estimated value decline (%/year)</label><input id="deprate" type="number" min="0" max="100" step=".5" value="10"></div>
+  <label class="ownership-check"><input id="autoMaint" type="checkbox"> Use the tire-free maintenance scenario when VIN is decoded (editable below)</label>
+  <button type="button" id="applyAAABenchmarks" class="feature-btn">Apply AAA class insurance estimate only</button>
+  <div class="ownership-meta" id="ownerClassStatus">AAA 2026 compact-SUV insurance-only reference: $2,294/year. Tire-free maintenance uses separate editable inputs.</div>
   <div class="ownership-info" style="margin-bottom:0">Depreciation is an <strong>editable assumption</strong> applied to estimated trade-in value. Annual economic cost includes interest, <em>not</em> loan principal. <a href="https://newsroom.aaa.com/2026/09/aaa-new-vehicle-ownership-costs-hit-12863-annually/" target="_blank" rel="noopener noreferrer">AAA methodology ↗</a></div>
 </div>
 </details>
@@ -329,7 +326,7 @@
 <div class="field"><label for="evEff">Tesla energy consumption (kWh/100 mi)</label><input id="evEff" type="number" min="1" max="100" step=".1" value="28"></div>
 <div class="row2"><div class="field"><label for="homecost">Home electricity ($/kWh)</label><input id="homecost" type="number" min="0" max="5" step=".01" value=".18"></div><div class="field"><label for="publiccost">Public charging ($/kWh)</label><input id="publiccost" type="number" min="0" max="5" step=".01" value=".42"></div></div>
 <div class="field"><label for="homeShare">Home charging share <em id="shareLabel">70%</em></label><input id="homeShare" style="height:24px;padding:0;accent-color:#171a20" type="range" min="0" max="100" value="70"></div>
-<div class="row2"><div class="field"><label for="newins">Insurance ($/mo)</label><input id="newins" type="number" min="0" value="175"></div><div class="field"><label for="newmaint">Maintenance ($/mo)</label><input id="newmaint" type="number" min="0" value="45"></div></div>
+<div class="row2"><div class="field"><label for="newins">Insurance ($/mo)</label><input id="newins" type="number" min="0" value="175"></div><div class="field"><label for="newmaint">Maintenance + repairs ($/mo; no tires)</label><input id="newmaint" type="number" min="0" value="45"></div></div>
 <div class="field"><label for="charger">One-time home charger setup ($) <em>Upfront, not monthly</em></label><input id="charger" type="number" min="0" step="50" value="0"></div>
 <div id="loanWarn"></div>
 <div class="slide-cta"><button type="button" class="btn btn-ghost" data-go="1">← Previous</button><button type="button" class="btn btn-red" data-see-results>Reveal the comparison ↓</button></div></article>
@@ -354,7 +351,7 @@
   <table class="owner-owner-table"><tbody>
     <tr><td>Fuel / energy</td><td id="ownerEnergyYear">—</td></tr>
     <tr><td>Insurance</td><td id="ownerInsYear">—</td></tr>
-    <tr><td>Maintenance, repairs + tires</td><td id="ownerMaintYear">—</td></tr>
+    <tr><td>Maintenance + repair allowance (no tires)</td><td id="ownerMaintYear">—</td></tr>
     
     <tr><td>Est. loan interest in next 12 months</td><td id="ownerInterestYear">—</td></tr>
     <tr><td>Estimated annual depreciation (noncash)</td><td id="ownerDepYear">—</td></tr>
@@ -426,24 +423,23 @@ const $=id=>document.getElementById(id);
 const cfg={"Model Y":{price:44990,eff:28,url:'https://www.tesla.com/modely/design'},"Model 3":{price:39990,eff:25.4,url:'https://www.tesla.com/model3/design'},"Model S":{price:79990,eff:31,url:'https://www.tesla.com/models/design'},"Model X":{price:89990,eff:34,url:'https://www.tesla.com/modelx/design'},"Cybertruck":{price:69990,eff:42,url:'https://www.tesla.com/cybertruck/design'}};
 const ids=['vehicle','balance','oldapr','oldterm','actualpay','trade','type','miles','eff','gasprice','oldins','oldmaint','model','price','newapr','newterm','down','taxes','credit','evEff','homecost','publiccost','homeShare','newins','newmaint','charger'];
 const initial=Object.fromEntries(ids.map(id=>[id,$(id).value]));
-// Source: AAA 2026 Your Driving Costs brochure, pages 1–2. Per-mile maintenance
-// and annual insurance averages are based on selected NEW 2026 models,
-// not exact used-car/VIN costs. Values should never be labeled VIN-specific.
+// AAA 2026 source for new-car insurance by broad vehicle class only.
+// These are not VIN-specific insurance quotes. No AAA tire-inclusive maintenance used.
 const ownershipBenchmarks={
- weighted:{label:'All vehicles · weighted reference',maint:.1173,insurance:2098},
- smallSedan:{label:'Small sedan',maint:.1110,insurance:1623},
- mediumSedan:{label:'Medium sedan',maint:.1142,insurance:1788},
- subSUV:{label:'Subcompact SUV',maint:.1162,insurance:2169},
- compactSUV:{label:'Compact SUV',maint:.1206,insurance:2294},
- mediumSUV:{label:'Medium SUV',maint:.1216,insurance:2469},
- midPickup:{label:'Midsize pickup',maint:.1126,insurance:1867},
- halfPickup:{label:'Half-ton pickup',maint:.1182,insurance:2134}
+ weighted:{label:'All vehicles · weighted reference',insurance:2098},
+ smallSedan:{label:'Small sedan',insurance:1623},
+ mediumSedan:{label:'Medium sedan',insurance:1788},
+ subSUV:{label:'Subcompact SUV',insurance:2169},
+ compactSUV:{label:'Compact SUV',insurance:2294},
+ mediumSUV:{label:'Medium SUV',insurance:2469},
+ midPickup:{label:'Midsize pickup',insurance:1867},
+ halfPickup:{label:'Half-ton pickup',insurance:2134}
 };
 let matchedVehicle=null,epaVehicles=new Map(),ownershipOrigin='Illustrative inputs',suppressMaintenanceChange=false;
 function ownerBench(){return ownershipBenchmarks[$('ownerClass').value]||ownershipBenchmarks.weighted;}
-function ownershipBenchmarkInfo(){const b=ownerBench();setText('ownerClassStatus',`2026 AAA ${b.label.toLowerCase()} reference: ${(b.maint*100).toFixed(2)}¢/mi upkeep, ${money(b.insurance)}/year insurance. New vehicles only, not a quote for this VIN.`);}
-function assignClass(key){if(!ownershipBenchmarks[key])key='weighted';$('ownerClass').value=key;$('maintRate').value=ownershipBenchmarks[key].maint;ownershipBenchmarkInfo();refreshMaintenance();}
-function refreshMaintenance(){if($('autoMaint').checked){$('oldmaint').value=(annualMiles*num('maintRate')/12).toFixed(2);}}
+function ownershipBenchmarkInfo(){const b=ownerBench();setText('ownerClassStatus',`AAA 2026 ${b.label.toLowerCase()} insurance-only reference: ${money(b.insurance)}/year on new vehicles. Not a VIN-based quote. Maintenance is modeled separately, without tires.`);}
+function assignClass(key){if(!ownershipBenchmarks[key])key='weighted';$('ownerClass').value=key;ownershipBenchmarkInfo();}
+function refreshMaintenance(){if($('autoMaint').checked&&typeof window.upgradeLabEstimateMaintenance==='function'){window.upgradeLabEstimateMaintenance();}}
 function estimateClass(body='',model='',size=''){
  const src=(body+' '+size).toLowerCase(),name=model.toLowerCase();
  const smallSUV=/hr-v|kona|trax|cx-30|crosstrek|corolla cross|venue|kick|trailblazer|bronco sport/.test(name);
@@ -512,7 +508,7 @@ setText('ownerSourceTag',ownershipOrigin);
 setText('ownerCashYear',money(oldTotal*12));setText('ownerCashMonth',money(oldTotal)+'/mo');
 setText('ownerEconomicYear',money(annualEconomic));setText('ownerEconomicMonth',money(annualEconomic/12)+'/mo equivalent');
 for(const [id,value] of [['ownerEnergyYear',oldEnergy*12],['ownerInsYear',oldInsurance*12],['ownerMaintYear',oldMaintenance*12],['ownerInterestYear',annualInterest],['ownerDepYear',annualDepreciation],['ownerEconomicTable',annualEconomic]])setText(id,money(value));
-setText('ownerDisclaimer',`Cost forecast for ${annualMiles.toLocaleString('en-US',{maximumFractionDigits:0})} miles/year. Upkeep benchmark: ${ownerBench().label} (AAA 2026, new cars) if applied; current insurance is an editable input, not a VIN record. Depreciation assumes ${num('deprate')}% of the ${money(trade)} trade-in estimate; loan interest is modeled for up to 12 payments. Economic cost excludes loan principal and should not be added to the cash-outflow comparison.`);
+setText('ownerDisclaimer',`Cost forecast for ${annualMiles.toLocaleString('en-US',{maximumFractionDigits:0})} miles/year. Tire-free maintenance is an illustrative service and repair scenario, not exact VIN history; insurance is an editable input. Depreciation assumes ${num('deprate')}% of the ${money(trade)} trade-in estimate; loan interest is modeled for up to 12 payments. Economic cost excludes loan principal and should not be added to the cash-outflow comparison.`);
 const difference=oldTotal-newTotal;
 setText('oldTotal',money(oldTotal));setText('newTotal',money(newTotal));
 const offerDueText=`${money(leaseDue)} due at signing`;
@@ -551,7 +547,7 @@ for(const id of ['leasePayment','leaseDue','leaseTerm','leaseMiles','leaseOverag
 $('dealType').addEventListener('change',()=>{$('leaseFields').hidden=$('dealType').value!=='lease';$('financeFields').hidden=$('dealType').value==='lease';calc();});
 $('model').addEventListener('change',()=>{let c=cfg[$('model').value];$('price').value=c.price;$('evEff').value=c.eff;calc();});
 $('type').addEventListener('change',()=>{const ev=$('type').value==='ev';$('oldEffLabel').textContent=ev?'Current usage (kWh/100 mi)':'Current efficiency (MPG)';$('oldEnergyPriceLabel').textContent=ev?'Electricity ($/kWh)':'Gasoline ($/gal)';$('eff').value=ev?'30':'23';$('gasprice').value=ev?'.18':'3.80';calc();});
-$('reset').addEventListener('click',()=>{ids.forEach(id=>$(id).value=initial[id]);$('vin').value='';$('vinstatus').textContent='VIN lookup uses NHTSA; EPA fuel economy may require choosing a trim. No loan or repair history is retrieved.';matchedVehicle=null;epaVehicles.clear();$('epaMatch').classList.remove('visible');$('epaVariant').innerHTML='<option value="">Choose engine / drivetrain</option>';$('autoMaint').checked=false;$('ownerClass').value='compactSUV';$('maintRate').value='.1206';$('deprate').value='10';ownershipOrigin='Illustrative inputs';ownershipBenchmarkInfo();unit='yearly';annualMiles=18000;$('dealType').value='lease';$('leaseFields').hidden=false;$('financeFields').hidden=true;for(const id of ['leasePayment','leaseDue','leaseTerm','leaseMiles','leaseOverage','leaseMonthlyTaxes'])$(id).value={leasePayment:399,leaseDue:3500,leaseTerm:36,leaseMiles:15000,leaseOverage:.25,leaseMonthlyTaxes:0}[id];setText('oldEffLabel','Current efficiency (MPG)');setText('oldEnergyPriceLabel','Gasoline ($/gal)');showMiles();calc();});
+$('reset').addEventListener('click',()=>{ids.forEach(id=>$(id).value=initial[id]);$('vin').value='';$('vinstatus').textContent='VIN lookup uses NHTSA; EPA fuel economy may require choosing a trim. No loan or repair history is retrieved.';matchedVehicle=null;epaVehicles.clear();$('epaMatch').classList.remove('visible');$('epaVariant').innerHTML='<option value="">Choose engine / drivetrain</option>';$('autoMaint').checked=false;$('ownerClass').value='compactSUV';$('deprate').value='10';ownershipOrigin='Illustrative inputs';ownershipBenchmarkInfo();unit='yearly';annualMiles=18000;$('dealType').value='lease';$('leaseFields').hidden=false;$('financeFields').hidden=true;for(const id of ['leasePayment','leaseDue','leaseTerm','leaseMiles','leaseOverage','leaseMonthlyTaxes'])$(id).value={leasePayment:399,leaseDue:3500,leaseTerm:36,leaseMiles:15000,leaseOverage:.25,leaseMonthlyTaxes:0}[id];setText('oldEffLabel','Current efficiency (MPG)');setText('oldEnergyPriceLabel','Gasoline ($/gal)');showMiles();calc();});
 $('print').addEventListener('click',()=>window.print());$('printTop').addEventListener('click',()=>window.print());
 
 // Normalise XML and JSON menu formats from FuelEconomy.gov.
@@ -621,13 +617,12 @@ async function applyEPARecord(){
 }
 $('applyEPA').addEventListener('click',applyEPARecord);
 $('ownerClass').addEventListener('change',()=>{assignClass($('ownerClass').value);ownershipOrigin=matchedVehicle?'VIN + class estimates':'Inputs / class estimates';calc();});
-$('maintRate').addEventListener('input',()=>{refreshMaintenance();calc();});
 $('deprate').addEventListener('input',calc);
 $('autoMaint').addEventListener('change',()=>{refreshMaintenance();ownershipOrigin=matchedVehicle?'VIN + class estimates':'Inputs / class estimates';calc();});
 $('applyAAABenchmarks').addEventListener('click',()=>{
  const b=ownerBench();$('oldins').value=(b.insurance/12).toFixed(2);
- $('autoMaint').checked=true;refreshMaintenance();ownershipOrigin='AAA category reference';calc();
- setText('ownerClassStatus',`Applied AAA 2026 ${b.label.toLowerCase()} new-car upkeep and insurance benchmarks; customer-specific upkeep and insurance should replace these. Registration remains customer-entered.`);
+ $('autoMaint').checked=false;ownershipOrigin='AAA insurance category reference';calc();
+ setText('ownerClassStatus',`Applied AAA 2026 ${b.label.toLowerCase()} insurance-only benchmark. Maintenance remains independent and excludes tires.`);
 });
 $('decodeVIN').addEventListener('click',async()=>{
  const vin=$('vin').value.trim().toUpperCase();
@@ -639,7 +634,7 @@ $('decodeVIN').addEventListener('click',async()=>{
   matchedVehicle=result;
   $('vehicle').value=[result.ModelYear,result.Make,result.Model,result.Trim].filter(Boolean).join(' ');
   assignClass(estimateClass(result.BodyClass,result.Model,''));
-  $('autoMaint').checked=true;refreshMaintenance();ownershipOrigin='VIN + class estimates';calc();
+  $('autoMaint').checked=true;ownershipOrigin='VIN identity + editable service estimate';document.dispatchEvent(new CustomEvent('upgradeLabVINDecoded',{detail:{year:result.ModelYear,make:result.Make,model:result.Model,trim:result.Trim||'',fuel:result.FuelTypePrimary||''}}));calc();
   $('vinstatus').textContent='VIN identified. Looking for EPA fuel economy options…';
   try{const message=await lookupEPA(result);$('vinstatus').textContent=`${result.ModelYear} ${result.Make} ${result.Model} decoded. ${message}`;}
   catch(error){$('vinstatus').textContent=`${result.ModelYear} ${result.Make} ${result.Model} identified; ${error.message}. MPG remains manual.`;}
